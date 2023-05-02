@@ -1,51 +1,40 @@
 <template>
     <div class="container">
-        <form name="create-account" @submit="onSubmit">
-            <h2>Create Account</h2>
-            <div>
-                <p>Username :</p>
-                <input type="text">
+        <h2>Create Account</h2>
+        <div>
+            <p>Username :</p>
+            <InputText type="text" v-model="username" />
+        </div>
+         <div>
+            <p>Email :</p>
+            <InputText type="text" v-model="email" />
+        </div>
+        <div>
+            <p>Password :</p>
+            <div class="card flex justify-content-center">
+                <Password v-model="password" toggleMask />
             </div>
-            <div>
-                <p>Email :</p>
-                <input type="email">
+        </div>
+        <div>
+            <p>Confirm password :</p>
+            <div class="card flex justify-content-center">
+                <Password v-model="passwordbis" toggleMask />
             </div>
-            <div>
-                <p>Password :</p>
-                <input v-model="password" >
-                <span>{{ errorMessage }}</span>
-            </div>
-            <div>
-                <p>Confirm password :</p>
-                <input type="text">
-            </div>
-            <button>VALIDATE</button>
-        </form>
+        </div>
+        <button>VALIDATE</button>
     </div>
 </template>
 
 <script lang="ts" setup>
 
-import {useField} from 'vee-validate'
+import Password from 'primevue/password';
+import InputText from 'primevue/inputtext';
+import { ref } from 'vue';
 
-const {password, errorMessage} = useField('fullName', validateField)
-
-
-function onSubmit(value: any){
-    console.log(value);    
-}
-
-function validateField(value: string) {
-  if (!value) {
-    return 'this field is required';
-  }
-
-  if (value.length < 8) {
-    return 'this field must contain at least 8 characters';
-  }
-
-  return true;
-}
+const username = ref();
+const email = ref();
+const password = ref();
+const passwordbis = ref();
 
 </script>
 
@@ -75,6 +64,8 @@ function validateField(value: string) {
     input{
         margin-left: 5px;
     };
+    
+
 
     button{
         position: absolute;
