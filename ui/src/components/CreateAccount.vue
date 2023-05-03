@@ -1,40 +1,61 @@
 <template>
     <div class="container">
-        <h2>Create Account</h2>
-        <div>
-            <p>Username :</p>
-            <InputText type="text" v-model="username" />
-        </div>
-         <div>
-            <p>Email :</p>
-            <InputText type="text" v-model="email" />
-        </div>
-        <div>
-            <p>Password :</p>
-            <div class="card flex justify-content-center">
-                <Password v-model="password" toggleMask />
+            <h2>Create Account</h2>            
+            <Message severity="error" v-if="errorMessage">{{ errorMessage }}</Message>
+            <div class="inputblock">
+                <p>Username :</p>
+                <InputText type="text" v-model="userCredentials.username" class="p-inputtext-sm" placeholder="username" />
             </div>
-        </div>
-        <div>
-            <p>Confirm password :</p>
-            <div class="card flex justify-content-center">
-                <Password v-model="passwordbis" toggleMask />
+             <div class="inputblock">
+                <p>Email :</p>
+                <InputText type="email" v-model="userCredentials.email" class="p-inputtext-sm" placeholder="email"/>
             </div>
+            <div class="inputblock">
+                <p>Password :</p>           
+                <Password v-model="userCredentials.password" toggleMask class="p-inputtext-sm" placeholder="password"/>            
+            </div>
+            <div class="inputblock">
+                <p>Confirm password :</p>
+                <Password v-model="userCredentials.passwordbis" toggleMask class="p-inputtext-sm" placeholder="confirm password"/>           
+            </div>
+            <button @click="validate">SUBMIT</button>
         </div>
-        <button>VALIDATE</button>
-    </div>
+    <div
+    class="outside"
+    @click="CreateAccountPanelStatus = !CreateAccountPanelStatus"
+  ></div>
 </template>
 
 <script lang="ts" setup>
 
+
 import Password from 'primevue/password';
 import InputText from 'primevue/inputtext';
-import { ref } from 'vue';
+import Message from 'primevue/message';
 
-const username = ref();
-const email = ref();
-const password = ref();
-const passwordbis = ref();
+import { reactive } from 'vue';
+
+import { composable } from '@/state/composable';
+
+import { useUserStore } from '@/stores/users'
+import { storeToRefs } from 'pinia';
+
+const { CreateAccountPanelStatus } = composable()
+
+const userStore = useUserStore()
+
+const { errorMessage } = storeToRefs(userStore)
+
+const userCredentials = reactive({
+    username: "",
+    email: "",
+    password: "",
+    passwordbis: ""
+})
+
+const validate = () => {
+    userStore.handleSignup(userCredentials)
+}
 
 </script>
 
@@ -45,38 +66,43 @@ const passwordbis = ref();
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
-    width: 400px;
-    height: 400px;
+    z-index: 3;
+    width: 500px;
+    height: 500px;
     background-color: #EBCFB2;
     border-radius: 5px;
 
-    h2{
-        text-align: center;
-        margin-top: 5px;
-    }
-
-    p{
-        margin-left: 5px;
-        margin-top: 15px;
-    };
-
-    input{
-        margin-left: 5px;
-    };
+        
+        h2{
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        .inputblock{
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+        
+        button{
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 40px;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+        }
     
-
-
-    button{
-        position: absolute;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 40px;
-        background-color: #FFFFFF;
-        border-radius: 5px;
-    }
 }
 
+.outside {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+  backdrop-filter: blur(2px);
+}
 </style>

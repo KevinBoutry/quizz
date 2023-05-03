@@ -8,24 +8,34 @@
             <div>QUIZZ</div>
             <div>CREER</div>
         </div>
-        <input type="text" class="search-bar">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <InputText v-model="search" placeholder="Search" class="p-inputtext-sm"/>
+        </span>
         <div class="right-homepanel">
 
             <div>lang</div>
-            <div class="profile-button" @click="OpenCreateAccount = !OpenCreateAccount">
+            <div class="profile-button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
                 profile
             </div>
         </div>
     </div>
-    <CreateAccount v-if="OpenCreateAccount"/>
+    <CreateAccount v-if="CreateAccountPanelStatus"/>
 </template>
 
 <script lang="ts" setup>
 
+import InputText from 'primevue/inputtext';
+
 import CreateAccount from './CreateAccount.vue';
+
 import { ref } from 'vue';
 
-const OpenCreateAccount = ref(false)
+import { composable } from '@/state/composable'
+
+const { CreateAccountPanelStatus } = composable()
+
+const search = ref("")
 
 </script>
 

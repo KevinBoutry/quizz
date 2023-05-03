@@ -5,13 +5,15 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [UserModule,
-  TypeOrmModule.forRoot({
-    type:"sqlite",
-    database:"quizzDB",
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true
-  })],
+  imports: [
+    UserModule,
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'quizzDB',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
