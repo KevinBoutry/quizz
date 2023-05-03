@@ -22,7 +22,7 @@
         </div>
     <div
     class="outside"
-    @click="CreateAccountPanelStatus = !CreateAccountPanelStatus"
+    @click="closePanel"
   ></div>
 </template>
 
@@ -57,6 +57,11 @@ const validate = () => {
     userStore.handleSignup(userCredentials)
 }
 
+const closePanel = () => {
+    CreateAccountPanelStatus.value = false;
+    errorMessage.value = ""
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +85,7 @@ const validate = () => {
         
         .inputblock{
             margin-top: 5px;
-            margin-left: 5px;
+            margin-left: 10px;
         }
         
         button{
