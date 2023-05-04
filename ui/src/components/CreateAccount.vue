@@ -76,6 +76,7 @@ const closePanel = () => {
     height: 500px;
     background-color: #EBCFB2;
     border-radius: 5px;
+    color: #000000;
 
         
         h2{
@@ -98,7 +99,6 @@ const closePanel = () => {
             background-color: #FFFFFF;
             border-radius: 5px;
         }
-    
 }
 
 .outside {

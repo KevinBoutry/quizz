@@ -6,10 +6,14 @@ import {
   Put,
   Delete,
   Body,
+  UsePipes,
+  ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from '../user.entity';
+import { CreateUserDto } from '../dto/user.dtos';
 
 @Controller('user')
 export class UserController {
@@ -21,18 +25,18 @@ export class UserController {
   }
 
   @Get(':userid')
-  async getOne(@Param() userid: number): Promise<User> {
+  async getOne(@Param('userid', ParseIntPipe) userid: number): Promise<User> {
     return await this.UserService.getOne(userid);
   }
 
-  @Post()
-  async create(@Body() user: User): Promise<User> {
-    console.log(user);
-    return await this.UserService.create(user);
+  @Post('signup')
+  @UsePipes(ValidationPipe)
+  async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserDto> {
+    return await this.UserService.create(createUserDto);
   }
 
   @Delete(':userid')
-  async delete(@Param() userid: number): Promise<DeleteResult> {
+  async delete(@Param('userid', ParseIntPipe) userid: number): Promise<DeleteResult> {
     return await this.UserService.delete(userid);
   }
 

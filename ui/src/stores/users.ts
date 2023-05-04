@@ -55,7 +55,7 @@ export const useUserStore = defineStore('users', () => {
         const success = ref(false);
         const error = ref('');
         
-        axios.post('http://localhost:3000/user', user)
+        axios.post('http://localhost:3000/user/signup', user)
         .then((res)=>{
             console.log(res.data);
             success.value = true            
