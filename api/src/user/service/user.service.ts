@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { User } from '../user.entity';
 import { CreateUserDto } from '../dto/user.dtos';
-import * as argon from 'argon2'
+import * as argon from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -14,11 +14,13 @@ export class UserService {
     return await this.UserRepository.find();
   }
 
-  async create(createUserDto: CreateUserDto): Promise<CreateUserDto> {   
+  async create(createUserDto: CreateUserDto): Promise<CreateUserDto> {
+    const hash = await argon.hash(createUserDto.password);
+    createUserDto.password = hash;  
     return await this.UserRepository.save(createUserDto);
   }
 
-  async getOne(userid: any): Promise<User> {
+  async getOne(userid: any): Promise<User> {    
     return await this.UserRepository.findOne(userid);
   }
 

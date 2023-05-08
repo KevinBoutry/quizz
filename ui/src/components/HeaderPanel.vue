@@ -14,13 +14,14 @@
         </span>
         <div class="right-homepanel">
 
-            <div>lang</div>
-            <div class="profile-button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
-                profile
+            <div class="button" @click="LoginPanelStatus = !LoginPanelStatus">signin</div>
+            <div class="button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
+                signup
             </div>
         </div>
     </div>
     <CreateAccount v-if="CreateAccountPanelStatus"/>
+    <LoginPanel v-if="LoginPanelStatus"/>
 </template>
 
 <script lang="ts" setup>
@@ -28,12 +29,13 @@
 import InputText from 'primevue/inputtext';
 
 import CreateAccount from './CreateAccount.vue';
+import LoginPanel from './LoginPanel.vue';
 
 import { ref } from 'vue';
 
 import { composable } from '@/state/composable'
 
-const { CreateAccountPanelStatus } = composable()
+const { CreateAccountPanelStatus, LoginPanelStatus } = composable()
 
 const search = ref("")
 
@@ -64,7 +66,7 @@ const search = ref("")
         div{
             margin-right: 5px;
         }
-        .profile-button{
+        .button{
             cursor: pointer;
         }
     }
