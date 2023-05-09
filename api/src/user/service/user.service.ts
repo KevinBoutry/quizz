@@ -16,11 +16,11 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<CreateUserDto> {
     const hash = await argon.hash(createUserDto.password);
-    createUserDto.password = hash;  
+    createUserDto.password = hash;
     return await this.UserRepository.save(createUserDto);
   }
 
-  async getOne(userid: any): Promise<User> {    
+  async getOneById(userid: any): Promise<User> {
     return await this.UserRepository.findOne(userid);
   }
 
@@ -30,5 +30,11 @@ export class UserService {
 
   async delete(userid: number): Promise<DeleteResult> {
     return await this.UserRepository.delete(userid);
+  }
+
+  async getOneByUsername(username: string): Promise<User | undefined> {
+    return await this.UserRepository.findOne({
+      where: { username },
+    });
   }
 }

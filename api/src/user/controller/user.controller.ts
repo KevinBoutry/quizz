@@ -26,7 +26,7 @@ export class UserController {
 
   @Get(':userid')
   async getOne(@Param('userid', ParseIntPipe) userid: number): Promise<User> {
-    return await this.UserService.getOne(userid);
+    return await this.UserService.getOneById(userid);
   }
 
   @Post('signup')
@@ -36,7 +36,9 @@ export class UserController {
   }
 
   @Delete(':userid')
-  async delete(@Param('userid', ParseIntPipe) userid: number): Promise<DeleteResult> {
+  async delete(
+    @Param('userid', ParseIntPipe) userid: number,
+  ): Promise<DeleteResult> {
     return await this.UserService.delete(userid);
   }
 

@@ -1,5 +1,11 @@
-import { IsEmail, IsNotEmpty, Length, Matches, MinLength } from "class-validator";
-import { REGEX } from "src/app.utils";
+import {
+  IsEmail,
+  IsNotEmpty,
+  Length,
+  Matches,
+  MinLength,
+} from 'class-validator';
+import { REGEX } from 'src/app.utils';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -20,5 +26,4 @@ export class CreateUserDto {
   createdAt: Date;
 
   isAdmin: boolean;
-
 }
