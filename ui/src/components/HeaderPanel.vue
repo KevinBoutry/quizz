@@ -6,18 +6,20 @@
                 HOME
             </div>
             <div>QUIZZ</div>
-            <div>CREER</div>
+            <div v-if="!isLogged" >CREER</div>
         </div>
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <InputText v-model="search" placeholder="Search" class="p-inputtext-sm"/>
         </span>
         <div class="right-homepanel">
-
-            <div class="button" @click="LoginPanelStatus = !LoginPanelStatus">signin</div>
-            <div class="button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
-                signup
+            <div v-if="!isLogged" class="button" @click="LoginPanelStatus = !LoginPanelStatus">SIGNIN</div>
+            <div v-if="!isLogged" class="button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
+                SIGNUP
             </div>
+            <div v-if="isLogged">PROFILE</div>
+            <div v-if="isLogged" @click="logout">LOGOUT</div>
+
         </div>
     </div>
     <CreateAccount v-if="CreateAccountPanelStatus"/>
@@ -33,11 +35,18 @@ import LoginPanel from './LoginPanel.vue';
 
 import { ref } from 'vue';
 
-import { composable } from '@/state/composable'
+import { composable } from '@/state/composable';
+import { useUserStore } from '@/stores/users'
 
-const { CreateAccountPanelStatus, LoginPanelStatus } = composable()
+const { CreateAccountPanelStatus, LoginPanelStatus, isLogged } = composable()
 
 const search = ref("")
+
+const userStore = useUserStore()
+
+const logout = () => {
+    userStore.handleLogout()
+}
 
 </script>
 

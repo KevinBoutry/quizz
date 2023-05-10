@@ -3,13 +3,13 @@
         <h2>Login</h2>
         <div class="inputblock">
             <p>Username or Email :</p>
-            <InputText type="text" class="p-inputtext-sm" placeholder="username or email"/>
+            <InputText type="text" class="p-inputtext-sm" v-model="userCredentials.username" placeholder="username or email"/>
         </div>
         <div class="inputblock">
             <p>Password :</p>
-            <Password type="text" class="p-inputtext-sm" placeholder="password" toggleMask :feedback="false"/>
+            <Password type="text" class="p-inputtext-sm" v-model="userCredentials.password" placeholder="password" toggleMask :feedback="false"/>
         </div>
-        <button>LOGIN</button>
+        <button @click="validate">LOGIN</button>
     </div>
     <div
     class="outside"
@@ -23,15 +23,29 @@ import { composable } from '@/state/composable';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 
+import { useUserStore } from '@/stores/users'
+import { reactive } from 'vue';
+
 const { LoginPanelStatus } = composable()
 
 const closePanel = () => {
     LoginPanelStatus.value = false;
 }
 
+const userCredentials = reactive({
+    username: "",
+    password: "",
+})
+
+const userStore = useUserStore()
+
+const validate = () => {
+    userStore.handleLogin(userCredentials)
+}
+
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .container{
     position: absolute;
@@ -44,6 +58,10 @@ const closePanel = () => {
     background-color: #EBCFB2;
     border-radius: 5px;
     color: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 
         
         h2{
@@ -52,8 +70,7 @@ const closePanel = () => {
         }
         
         .inputblock{
-            margin-top: 5px;
-            margin-left: 10px;
+            margin-top: 10px;
         }
         
         button{

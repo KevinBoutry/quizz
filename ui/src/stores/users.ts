@@ -1,11 +1,17 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+import { composable } from '@/state/composable';
+
 import axios from 'axios';
 
 export const useUserStore = defineStore('users', () => {
     const user = ref(null);
-    const errorMessage = ref("")
+    const errorMessage = ref("");
+    const { isLogged, LoginPanelStatus, CreateAccountPanelStatus } = composable();
+
+    const jwt = require("jsonwebtoken")
+
 
     const validateEmail = (email : string) =>  {
         return String(email)
@@ -19,7 +25,35 @@ export const useUserStore = defineStore('users', () => {
         .match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)
     }
 
-    const handleLogin = ()=>{}
+    const handleLogin = (credentials: {username: string, password:string})=>{
+        const { username, password } = credentials;
+
+        const success = ref(false);
+        const error = ref('');
+
+        const user = {
+            'username': username,
+            'password': password,
+        }
+
+        axios.post('http://localhost:3000/auth/login', user)
+        .then((res)=>{
+            console.log(res.data);
+            success.value = true;
+            if(res.data.access_token) {
+                localStorage.setItem('user', JSON.stringify(res.data));
+                isLogged.value = true;                
+            }
+            LoginPanelStatus.value = false;
+            
+        })
+        .catch((e=>{
+            error.value = e.data.message;
+            errorMessage.value = 'Invalid credentials'
+        }))
+
+    }
+    
 
     const handleSignup = (credentials: {username: string, email:string, password:string, passwordbis:string}) => {
         const { username, email, password, passwordbis } = credentials;
@@ -58,14 +92,18 @@ export const useUserStore = defineStore('users', () => {
         axios.post('http://localhost:3000/user/signup', user)
         .then((res)=>{
             console.log(res.data);
-            success.value = true            
+            success.value = true;
+            CreateAccountPanelStatus.value = false;
         })
-        .catch((error=>{
-            error.value = error.data.message
+        .catch((e=>{
+            error.value = e.data.message
         }))        
     }
 
-    const handleLogout = ()=>{}
+    const handleLogout = ()=>{
+        isLogged.value = false;
+        localStorage.removeItem('user')
+    }
 
     const getUser = ()=>{}
 
