@@ -10,7 +10,7 @@ export const useUserStore = defineStore('users', () => {
     const errorMessage = ref("");
     const { isLogged, LoginPanelStatus, CreateAccountPanelStatus } = composable();
 
-    const jwt = require("jsonwebtoken")
+    /* const jwt = require("jsonwebtoken") */
 
 
     const validateEmail = (email : string) =>  {
@@ -51,7 +51,6 @@ export const useUserStore = defineStore('users', () => {
             error.value = e.data.message;
             errorMessage.value = 'Invalid credentials'
         }))
-
     }
     
 

@@ -6,7 +6,7 @@
                 HOME
             </div>
             <div>QUIZZ</div>
-            <div v-if="!isLogged" >CREER</div>
+            <div v-if="isLogged" >CREER</div>
         </div>
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
@@ -17,9 +17,13 @@
             <div v-if="!isLogged" class="button" @click="CreateAccountPanelStatus = !CreateAccountPanelStatus">
                 SIGNUP
             </div>
-            <div v-if="isLogged">PROFILE</div>
-            <div v-if="isLogged" @click="logout">LOGOUT</div>
-
+            <div v-if="isLogged">Connecté : {{ userStore.user }}</div>
+            <div v-if="isLogged">
+                <RouterLink to="/profile">                    
+                    PROFILE
+                </RouterLink>
+            </div>
+            <div v-if="isLogged" class="button" @click="logout">LOGOUT</div>
         </div>
     </div>
     <CreateAccount v-if="CreateAccountPanelStatus"/>
@@ -28,12 +32,14 @@
 
 <script lang="ts" setup>
 
+import {RouterLink, useRouter} from "vue-router"
+
 import InputText from 'primevue/inputtext';
 
 import CreateAccount from './CreateAccount.vue';
 import LoginPanel from './LoginPanel.vue';
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { composable } from '@/state/composable';
 import { useUserStore } from '@/stores/users'
@@ -43,10 +49,19 @@ const { CreateAccountPanelStatus, LoginPanelStatus, isLogged } = composable()
 const search = ref("")
 
 const userStore = useUserStore()
+const router = useRouter()
 
 const logout = () => {
-    userStore.handleLogout()
+    userStore.handleLogout();
+    router.push("/")
 }
+
+onMounted(() => {
+    const userLS = localStorage.getItem('user')
+    if (userLS) {
+        isLogged.value = true;    
+    }
+})
 
 </script>
 
