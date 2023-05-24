@@ -61,28 +61,26 @@ const validate = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-
         
-        h2{
-            text-align: center;
-            margin-top: 5px;
-        }
+    h2{
+        text-align: center;
+        margin-top: 5px;
+    }
         
-        .inputblock{
-            margin-top: 10px;
-        }
+    .inputblock{
+        margin-top: 10px;
+    }
         
-        button{
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 40px;
-            background-color: #FFFFFF;
-            border-radius: 5px;
-        }
+    button{
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 40px;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+    }
 }
 
 .outside {

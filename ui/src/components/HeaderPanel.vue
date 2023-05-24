@@ -2,11 +2,19 @@
     <div class="header">
         <div class="left-homepanel">
             <div class="home-button">
+                <RouterLink to="/">
                 <!-- TODO : Logo du site en bouton Home -->
                 HOME
+            </RouterLink>
             </div>
-            <div>QUIZZ</div>
-            <div v-if="isLogged" >CREER</div>
+            <div>
+                QUIZZ
+            </div>
+            <div v-if="isLogged" >
+                <RouterLink to="create">
+                    CREER
+                </RouterLink>
+            </div>
         </div>
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
