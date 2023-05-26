@@ -4,11 +4,13 @@
         <h1>Bienvenue sur NomDuSite</h1>
         <p>Ici vous pouvez jouer à des quizz mais aussi en créer et les partager avec vos amis</p>
     </div>
+    <FooterPanel/>
 </template>
 
 <script lang="ts" setup>
 
 import HeaderPanel from '@/components/HeaderPanel.vue';
+import FooterPanel from '@/components/FooterPanel.vue';
 
 </script>
 
