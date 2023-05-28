@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/service/auth.service';
 import entities from './user';
 import { JwtModule } from '@nestjs/jwt';
+import { QuizzModule } from './quizz/quizz.module';
+
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
     }),
     AuthModule,
+    QuizzModule
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
