@@ -61,6 +61,7 @@ const validate = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
         
     h2{
         text-align: center;

@@ -21,7 +21,7 @@
             <div class="inputcontainer">
                 <label for="categories">Categories :</label>
                 <InputText type="text" v-model="category"/>
-                <Button label="Add" @click="addToCategories"/>
+                <Button label="Add" @click="addToCategories" class="addcat-button"/>
             </div>
             <div class="category-list">
                 <div v-for="cat in categoryList" class="category-list-items" >{{ cat.name }}</div>
@@ -33,12 +33,15 @@
                 <Dropdown v-model="selectedCategory" :options="categoryList" optionLabel="name" placeholder="Select category" class="w-full md:w-14rem" />
                 <Button label="Delete" @click="rowCount --" class="delete-button"/>
             </div>
-            <Button label="Add Row" @click="rowCount ++" class="add-button"/>
+            <Button label="Add Row" @click="rowCount ++" class="addrow-button"/>
 
         </div>
         <div class="preview">
-
+            <div>
+                {{ quizzName }}
+            </div>
         </div>
+        <Button label="PREVIEW" class="preview-button"/>
     </div>
     <FooterPanel />
 </template>
@@ -111,13 +114,16 @@ function addToCategories(){
                 width: 80px;
             }
 
+            .addcat-button{
+                margin-left: 10px;
+            }
             
             .delete-button {
                 margin-left: 10px;
             }
         }
 
-        .add-button {
+        .addrow-button {
             position: relative;
             left: 120px;
             margin: 10px;
@@ -146,8 +152,23 @@ function addToCategories(){
         right: 150px;
         top: 150px;
         width: 400px;
-        height: 400px;
+        height: 250px;
         background-color: white;
+        color: black;
+        text-align: center;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .preview-button{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 30px;
+        width: 10vw;
+        height: 5vh;
     }
 }
 
