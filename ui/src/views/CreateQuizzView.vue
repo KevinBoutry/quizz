@@ -3,7 +3,7 @@
     <div class="container">
         <div class="form">
             <div class="inputcontainer">
-                <label for="quizzName">Nom du Quizz :</label>
+                <label for="quizzName">Quizz Name :</label>
                 <InputText type="text" v-model="quizzName" class="input"/>
             </div>
             <div class="inputcontainer textareainput">
@@ -15,8 +15,8 @@
                 <InputText type="text" v-model="time" class="input timeinput"/>
             </div>
             <div class="inputcontainer">
-                <label for="vignette">Vignette :</label>
-                <FileUpload  mode="basic"/>
+                <label for="vignette">Thumbnail :</label>
+                <FileUpload  mode="basic" />
             </div>
             <div class="inputcontainer">
                 <label for="categories">Categories :</label>
@@ -24,7 +24,11 @@
                 <Button label="Add" @click="addToCategories" class="addcat-button"/>
             </div>
             <div class="category-list">
-                <div v-for="cat in categoryList" class="category-list-items" >{{ cat.name }}</div>
+                <div v-for="cat in categoryList" class="category-list-items" >
+                    <div>{{ cat.name }}</div>
+                    <div class="deletecat" @click="deleteCategory(cat.name)">X</div>
+                </div>
+
             </div>
             <div v-for="n in rowCount" class="inputcontainer">
                 <label for="items">Item :</label>
@@ -57,24 +61,28 @@ import Dropdown from 'primevue/dropdown';
 import HeaderPanel from '@/components/HeaderPanel.vue';
 import FooterPanel from '@/components/FooterPanel.vue';
 
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 
 const quizzName = ref();
 const description = ref();
 const time = ref();
 const category = ref("");
-const categoryList = ref([])
+const categoryList: Ref<any>= ref([])
 const rowCount = ref(1)
 const selectedCategory = ref()
 
 function addToCategories(){
-    if(category.value){
-        console.log(category.value);
-        console.log(categoryList.value);      
+    if(category.value){    
         categoryList.value.push({name: category.value});
         category.value = ""
-        console.log(categoryList.value);
     }    
+}
+
+function deleteCategory(cat : string){
+    console.log(cat); 
+    console.log(categoryList.value.indexOf({name: `${cat}`}));    
+    const index = categoryList.value.indexOf({name: `${cat}`});
+    categoryList.value.splice(index,1);
 }
 
 </script>
@@ -140,9 +148,18 @@ function addToCategories(){
             .category-list-items{
                 color: black;
                 padding: 3px;
+                display: flex;
                 
                 &:hover{
                     background-color: rgb(222, 220, 220);
+                }
+
+                .deletecat{
+                    color: red;
+                    font-weight: bold;
+                    position: absolute;
+                    right: 10px;
+                    cursor: pointer;
                 }
             }
         }
@@ -160,6 +177,7 @@ function addToCategories(){
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 4px;
     }
 
     .preview-button{
