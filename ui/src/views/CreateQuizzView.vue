@@ -16,7 +16,7 @@
             </div>
             <div class="inputcontainer">
                 <label for="vignette">Thumbnail :</label>
-                <FileUpload  mode="basic" />
+                <FileUpload  mode="basic" accept="image/*" :maxFileSize="10000000" @change="imagePreview" />
             </div>
             <div class="inputcontainer">
                 <label for="categories">Categories :</label>
@@ -28,17 +28,8 @@
                     <div>{{ cat.name }}</div>
                     <div class="deletecat" @click="deleteCategory(cat.name)">X</div>
                 </div>
-
             </div>
-            <div v-for="n in rowCount" class="inputcontainer">
-                <label for="items">Item :</label>
-                <inputText type="text" class="input"/>
-                <label for="categories">Category :</label>
-                <Dropdown v-model="selectedCategory" :options="categoryList" optionLabel="name" placeholder="Select category" class="w-full md:w-14rem" />
-                <Button label="Delete" @click="rowCount --" class="delete-button"/>
-            </div>
-            <Button label="Add Row" @click="rowCount ++" class="addrow-button"/>
-
+            <ItemList/>
         </div>
         <div class="preview">
             <div>
@@ -56,20 +47,19 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
-import Dropdown from 'primevue/dropdown';
 
 import HeaderPanel from '@/components/HeaderPanel.vue';
 import FooterPanel from '@/components/FooterPanel.vue';
 
 import { ref, type Ref } from 'vue';
+import ItemList from '@/components/itemList.vue';
 
 const quizzName = ref();
 const description = ref();
 const time = ref();
 const category = ref("");
-const categoryList: Ref<any>= ref([])
-const rowCount = ref(1)
-const selectedCategory = ref()
+const categoryList: Ref<any>= ref([]);
+const thumbnail = ref<File | null>()
 
 function addToCategories(){
     if(category.value){    
@@ -83,6 +73,11 @@ function deleteCategory(cat : string){
     console.log(categoryList.value.indexOf({name: `${cat}`}));    
     const index = categoryList.value.indexOf({name: `${cat}`});
     categoryList.value.splice(index,1);
+}
+
+const imagePreview = (event: any) => {
+    thumbnail.value = event.target.files[0]
+    console.log(thumbnail.value);    
 }
 
 </script>
