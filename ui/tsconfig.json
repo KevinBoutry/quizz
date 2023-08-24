@@ -1,14 +1,38 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*"],
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "composite": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "module": "es2022",
+    "paths": {
+      "@router/*": ["./src/router/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@components/*": ["./src/components/*"],
+      "@views/*": ["./src/views/*"],
+      "@repositories/*": ["./src/repositories/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@state/*": ["./src/state/*"],
+      "@view-models/*": ["./src/view-models/*"]
     },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
-  ]
+    "types": ["jest", "node", "jsdom"],
+    "moduleResolution": "node",
+    "target": "es2022",
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "../../dist/front",
+    "incremental": false,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "lib": ["es2022"]
+  },
+  "files": ["./src/vue-shims.d.ts"]
 }

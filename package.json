@@ -25,5 +25,8 @@
     "bracketSpacing": true,
     "singleQuote": true,
     "trailingComma": "es5"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
   }
 }

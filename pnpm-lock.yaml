@@ -2,7 +2,11 @@ lockfileVersion: '6.0'
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
 
   api:
     dependencies:
@@ -145,6 +149,9 @@ importers:
       primevue:
         specifier: ^3.28.0
         version: 3.28.0(vue@3.2.47)
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
       vee-validate:
         specifier: ^4.8.6
         version: 4.8.6(vue@3.2.47)
