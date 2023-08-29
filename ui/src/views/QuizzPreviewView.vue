@@ -21,10 +21,8 @@
         <div class="category-title">
           {{ category.name }}
         </div>
-        <div v-for="item in PreviewQuizz.items" :key="item.id">
-          <span class="items" v-if="item.category === category.name">
-            {{ item.value }}</span
-          >
+        <div v-for="item in category.items" :key="item.id">
+          <span class="items"> {{ item.name }}</span>
         </div>
       </div>
     </div>
