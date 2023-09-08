@@ -11,6 +11,16 @@
         <Textarea v-model="PreviewQuizz.description" class="input" />
       </div>
       <div class="inputcontainer">
+        <label for="theme">Theme :</label>
+        <Dropdown
+          v-model="PreviewQuizz.theme"
+          :options="Theme"
+          optionLabel="name"
+          placeholder="Select a Theme"
+          class="w-full md:w-14rem"
+        />
+      </div>
+      <div class="inputcontainer">
         <label for="timer">Time :</label>
         <InputText
           type="text"
@@ -45,16 +55,19 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 
 import HeaderPanel from '@/components/HeaderPanel.vue';
 import FooterPanel from '@/components/FooterPanel.vue';
 import CategoryPanel from '@/components/CategoryPanel.vue';
 
 import { composable } from '@/state/composable';
+import { theme } from '@/state/theme';
 import router from '@/router/index.ts';
 import { onMounted } from 'vue';
 
 const { PreviewQuizz } = composable();
+const { Theme } = theme();
 
 const imagePreview = (event: any) => {
   PreviewQuizz.value.thumbnail = event.files[0].objectURL;

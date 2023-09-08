@@ -5,15 +5,17 @@ import { Quizz } from '../quizz.entity';
 
 @Controller('quizz')
 export class QuizzController {
-    constructor(private QuizzService: QuizzService) {}
+  constructor(private QuizzService: QuizzService) {}
 
-    @Get()
-    async getAll(): Promise<Quizz[]> {
-        return await this.QuizzService.getAll()
-    }
+  @Get()
+  async getAll(): Promise<Quizz[]> {
+    return await this.QuizzService.getAll();
+  }
 
-    @Post('create')
-    async create(@Body() createQuizzDto : CreateQuizzDto) : Promise<CreateQuizzDto> {
-        return await this.QuizzService.create(createQuizzDto)
-    }
+  @Post('create')
+  async create(
+    @Body() createQuizzDto: CreateQuizzDto,
+  ): Promise<CreateQuizzDto> {
+    return await this.QuizzService.create(createQuizzDto);
+  }
 }

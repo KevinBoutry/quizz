@@ -2,6 +2,7 @@
   <HeaderPanel />
   <div class="preview">
     <h1 class="quizz-title">{{ PreviewQuizz.name }}</h1>
+    <h3 class="quizz-theme">{{ PreviewQuizz.theme.name }}</h3>
     <div class="quizz-description">{{ PreviewQuizz.description }}</div>
     <div class="input-timer">
       <InputText
@@ -28,7 +29,7 @@
     </div>
     <div class="bottom-buttons">
       <Button label="BACK" class="bottom-button" @click="backToCreate" />
-      <Button label="SAVE" class="bottom-button" />
+      <Button label="SAVE" class="bottom-button" @click="saveQuizz" />
     </div>
   </div>
   <FooterPanel />
@@ -43,11 +44,25 @@ import FooterPanel from '@/components/FooterPanel.vue';
 
 import { composable } from '@/state/composable';
 import router from '@/router/index.ts';
+import { QuizzService } from '@/services/QuizzService.ts';
 
 const { PreviewQuizz } = composable();
 
+const quizzService: QuizzService = new QuizzService();
+
 function backToCreate() {
   router.push('/create');
+}
+
+async function saveQuizz() {
+  const res = await quizzService.createQuizz({
+    quizzname: PreviewQuizz.value.name,
+    timer: PreviewQuizz.value.time,
+    theme: PreviewQuizz.value.theme,
+    description: PreviewQuizz.value.description,
+    thumbnail: PreviewQuizz.value.thumbnail,
+    items: PreviewQuizz.value.categories,
+  });
 }
 </script>
 
@@ -60,6 +75,12 @@ function backToCreate() {
   .quizz-title {
     text-align: center;
     font-size: 3rem;
+  }
+
+  .quizz-theme {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #e22c2c;
   }
 
   .quizz-description {

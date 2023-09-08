@@ -9,11 +9,14 @@ import {
   UsePipes,
   ValidationPipe,
   ParseIntPipe,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from '../user.entity';
 import { CreateUserDto } from '../dto/user.dtos';
+import { AuthGuard } from '../../auth/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +25,12 @@ export class UserController {
   @Get()
   async getAll(): Promise<User[]> {
     return await this.UserService.getAll();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async getProfile(@Request() req) {
+    console.log('');
   }
 
   @Get(':userid')

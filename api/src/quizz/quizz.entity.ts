@@ -1,43 +1,51 @@
-import { User } from "src/user/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Item } from "./item.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { Item } from './item.entity';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Quizz {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    quizzid: number;
+  @Column({ unique: true })
+  name: string;
 
-    @Column({unique: true})
-    quizzname: string;
+  @Column({ nullable: true })
+  description: string;
 
-    @Column({nullable: true})
-    description: string;
+  @Column()
+  timer: number;
 
-    @Column()
-    timer: number;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @Column()
+  theme: string;
 
-    @Column()
-    theme: string;
+  @Column({ nullable: true })
+  thumbnail: string;
 
-    @Column({nullable: true})
-    thumbnail: string;
+  @Column({ default: 0 })
+  timeplayed: number;
 
-    @Column({default: 0})
-    timeplayed: number;
-    
-    @Column({default: 0})
-    upvote: number;
-    
-    @Column({default: 0})
-    downvote: number;
+  @Column({ default: 0 })
+  upvote: number;
 
-    @ManyToOne(() => User, (user) => user.quizzes)
-    user: User
+  @Column({ default: 0 })
+  downvote: number;
 
-    @OneToMany(() => Item, (item) => item.quizz)
-    items: Item[]
+  @ManyToOne(() => User, (user) => user.quizzes)
+  user: User;
+
+  @OneToMany(() => Item, (item) => item.quizz)
+  items: Item[];
 }

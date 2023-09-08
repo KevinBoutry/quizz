@@ -1,17 +1,18 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Quizz } from "./quizz.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Quizz } from './quizz.entity';
 
 @Entity()
 export class Item {
-    @PrimaryGeneratedColumn()
-    itemid: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    itemname: string;
+  @Column()
+  name: string;
 
-    @Column({nullable: true})
-    category: string;
+  @Column({ nullable: true })
+  category: string;
 
-    @ManyToOne(() => Quizz, (quizz) => quizz.items)
-    quizz: Quizz
+  @ManyToOne(() => Quizz, (quizz) => quizz.items)
+  quizz: Quizz;
 }

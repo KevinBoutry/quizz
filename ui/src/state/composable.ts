@@ -7,6 +7,7 @@ const isLogged = ref(false);
 const PreviewQuizz = ref({
   name: '',
   description: '',
+  theme: '',
   time: 0,
   thumbnail: '',
   categories: [],

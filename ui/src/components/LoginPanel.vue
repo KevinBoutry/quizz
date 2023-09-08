@@ -1,87 +1,93 @@
 <template>
-    <div class="container">
-        <h2>Login</h2>
-        <div class="inputblock">
-            <p>Username or Email :</p>
-            <InputText type="text" class="p-inputtext-sm" v-model="userCredentials.username" placeholder="username or email"/>
-        </div>
-        <div class="inputblock">
-            <p>Password :</p>
-            <Password type="text" class="p-inputtext-sm" v-model="userCredentials.password" placeholder="password" toggleMask :feedback="false"/>
-        </div>
-        <button @click="validate">LOGIN</button>
+  <div class="container">
+    <h2>Login</h2>
+    <div class="inputblock">
+      <p>Username or Email :</p>
+      <InputText
+        type="text"
+        class="p-inputtext-sm"
+        v-model="userCredentials.username"
+        placeholder="username or email"
+      />
     </div>
-    <div
-    class="outside"
-    @click="closePanel"
-  ></div>
+    <div class="inputblock">
+      <p>Password :</p>
+      <Password
+        type="text"
+        class="p-inputtext-sm"
+        v-model="userCredentials.password"
+        placeholder="password"
+        toggleMask
+        :feedback="false"
+      />
+    </div>
+    <button @click="validate">LOGIN</button>
+  </div>
+  <div class="outside" @click="closePanel"></div>
 </template>
 
 <script lang="ts" setup>
-
 import { composable } from '@/state/composable';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
-
-import { useUserStore } from '@/stores/users'
+import { UserService } from '@/services/UserService.ts';
 import { reactive } from 'vue';
 
-const { LoginPanelStatus } = composable()
+const { LoginPanelStatus } = composable();
 
 const closePanel = () => {
-    LoginPanelStatus.value = false;
-}
+  LoginPanelStatus.value = false;
+};
 
 const userCredentials = reactive({
-    username: "",
-    password: "",
-})
+  username: '',
+  password: '',
+});
 
-const userStore = useUserStore()
+const userService: UserService = new UserService();
 
-const validate = () => {
-    userStore.handleLogin(userCredentials)
+async function validate() {
+  console.log('yoh');
+  await userService.handleLogin(userCredentials);
 }
-
 </script>
 
 <style lang="scss" scoped>
+.container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 500px;
+  height: 500px;
+  background-color: #ebcfb2;
+  border-radius: 5px;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
 
-.container{
+  h2 {
+    text-align: center;
+    margin-top: 5px;
+  }
+
+  .inputblock {
+    margin-top: 10px;
+  }
+
+  button {
     position: absolute;
+    bottom: 25px;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    width: 500px;
-    height: 500px;
-    background-color: #EBCFB2;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 40px;
+    background-color: #ffffff;
     border-radius: 5px;
-    color: #000000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-        
-    h2{
-        text-align: center;
-        margin-top: 5px;
-    }
-        
-    .inputblock{
-        margin-top: 10px;
-    }
-        
-    button{
-        position: absolute;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 40px;
-        background-color: #FFFFFF;
-        border-radius: 5px;
-    }
+  }
 }
 
 .outside {
