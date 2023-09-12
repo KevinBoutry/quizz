@@ -3,7 +3,7 @@ import { IsNotEmpty, MinLength } from 'class-validator';
 export class CreateQuizzDto {
   @IsNotEmpty()
   @MinLength(8)
-  quizzname: string;
+  name: string;
 
   @IsNotEmpty()
   timer: number;
@@ -11,11 +11,13 @@ export class CreateQuizzDto {
   @IsNotEmpty()
   theme: string;
 
-  quizzid: number;
+  id: number;
 
   description: string;
 
   thumbnail: string;
 
   createdAt: Date;
+
+  items: Array<Record<string, any>>;
 }

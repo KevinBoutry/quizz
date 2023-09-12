@@ -1,5 +1,4 @@
 <template>
-  <HeaderPanel />
   <div class="container">
     <div class="form">
       <div class="inputcontainer">
@@ -47,7 +46,6 @@
     </div>
     <Button label="PREVIEW" class="preview-button" @click="createPreview" />
   </div>
-  <FooterPanel />
 </template>
 
 <script lang="ts" setup>
@@ -57,14 +55,11 @@ import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 
-import HeaderPanel from '@/components/HeaderPanel.vue';
-import FooterPanel from '@/components/FooterPanel.vue';
 import CategoryPanel from '@/components/CategoryPanel.vue';
 
 import { composable } from '@/state/composable';
 import { theme } from '@/state/theme';
 import router from '@/router/index.ts';
-import { onMounted } from 'vue';
 
 const { PreviewQuizz } = composable();
 const { Theme } = theme();
@@ -76,10 +71,6 @@ const imagePreview = (event: any) => {
 function createPreview() {
   router.push('/preview');
 }
-
-onMounted(() => {
-  console.log(PreviewQuizz.value);
-});
 </script>
 
 <style lang="scss">

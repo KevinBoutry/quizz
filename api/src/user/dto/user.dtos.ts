@@ -5,6 +5,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+
 import { REGEX } from 'src/app.utils';
 
 export class CreateUserDto {
@@ -21,7 +22,7 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-  userid: number;
+  id: number;
 
   createdAt: Date;
 

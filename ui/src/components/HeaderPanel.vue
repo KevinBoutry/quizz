@@ -51,14 +51,19 @@ import CreateAccount from './CreateAccount.vue';
 import LoginPanel from './LoginPanel.vue';
 
 import { onMounted, ref } from 'vue';
+import { UserService } from '@/services/UserService';
 
 import { composable } from '@/state/composable';
+import { user } from '@/state/user';
 
 const { CreateAccountPanelStatus, LoginPanelStatus, isLogged } = composable();
 
 const search = ref('');
 
 const router = useRouter();
+const { userProfile } = user();
+
+const userService: UserService = new UserService();
 
 const logout = () => {
   isLogged.value = false;
@@ -66,10 +71,16 @@ const logout = () => {
   router.push('/');
 };
 
-onMounted(() => {
+onMounted(async () => {
   const userLS = localStorage.getItem('user');
   if (userLS) {
     isLogged.value = true;
+  }
+  if (isLogged) {
+    const user = await userService.getUser();
+    userProfile.value.username = user.username;
+    userProfile.value.userid = user.sub;
+    console.log(userProfile.value);
   }
 });
 </script>

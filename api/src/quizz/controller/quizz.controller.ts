@@ -16,6 +16,7 @@ export class QuizzController {
   async create(
     @Body() createQuizzDto: CreateQuizzDto,
   ): Promise<CreateQuizzDto> {
+    console.log('dto : ', createQuizzDto);
     return await this.QuizzService.create(createQuizzDto);
   }
 }

@@ -1,18 +1,16 @@
 <template>
-  <HeaderPanel />
   <div>
     <h1>Utilisateur : {{ userProfile.username }}</h1>
     <h2>id : {{ userProfile.userid }}</h2>
   </div>
-  <FooterPanel />
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import HeaderPanel from '../components/HeaderPanel.vue';
+
 import { onMounted } from 'vue';
 import { composable } from '@/state/composable';
-import FooterPanel from '@/components/FooterPanel.vue';
+
 import { UserService } from '@/services/UserService';
 import { user } from '@/state/user';
 

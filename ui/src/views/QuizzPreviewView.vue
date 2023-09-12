@@ -1,5 +1,4 @@
 <template>
-  <HeaderPanel />
   <div class="preview">
     <h1 class="quizz-title">{{ PreviewQuizz.name }}</h1>
     <h3 class="quizz-theme">{{ PreviewQuizz.theme.name }}</h3>
@@ -32,36 +31,48 @@
       <Button label="SAVE" class="bottom-button" @click="saveQuizz" />
     </div>
   </div>
-  <FooterPanel />
 </template>
 
 <script lang="ts" setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
-import HeaderPanel from '@/components/HeaderPanel.vue';
-import FooterPanel from '@/components/FooterPanel.vue';
-
 import { composable } from '@/state/composable';
+import { user } from '@/state/user';
 import router from '@/router/index.ts';
 import { QuizzService } from '@/services/QuizzService.ts';
+import { ref } from 'vue';
 
 const { PreviewQuizz } = composable();
+const { userProfile } = user();
 
 const quizzService: QuizzService = new QuizzService();
+
+const itemList = ref([]);
 
 function backToCreate() {
   router.push('/create');
 }
 
+function createItemList() {
+  PreviewQuizz.value.categories.forEach((cat) => {
+    cat.items.forEach((item) => {
+      itemList.value.push({ category: cat.name, name: item.name });
+    });
+  });
+}
+
 async function saveQuizz() {
+  createItemList();
+  console.log('userid  ', userProfile.value.userid);
   const res = await quizzService.createQuizz({
-    quizzname: PreviewQuizz.value.name,
+    name: PreviewQuizz.value.name,
     timer: PreviewQuizz.value.time,
-    theme: PreviewQuizz.value.theme,
+    theme: PreviewQuizz.value.theme.name,
     description: PreviewQuizz.value.description,
     thumbnail: PreviewQuizz.value.thumbnail,
-    items: PreviewQuizz.value.categories,
+    items: itemList.value,
+    userid: userProfile.value.userid,
   });
 }
 </script>

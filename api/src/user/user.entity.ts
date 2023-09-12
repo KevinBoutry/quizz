@@ -1,16 +1,17 @@
-import { Quizz } from 'src/quizz/quizz.entity';
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  Entity,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Quizz } from 'src/quizz/quizz.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  userid: number;
+  id: number;
 
   @Column({ unique: true })
   username: string;
@@ -27,7 +28,6 @@ export class User {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @OneToMany(()=> Quizz, (quizz) => quizz.user)
-  quizzes: Quizz[]
-
+  @OneToMany(() => Quizz, (quizz) => quizz.user)
+  quizzes: Quizz[];
 }

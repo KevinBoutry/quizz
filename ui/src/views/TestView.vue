@@ -1,19 +1,7 @@
 <template>
-    <HeaderPanel/>
-    <div>
-
-    </div>
-    <FooterPanel/>
+  <div></div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup></script>
 
-import HeaderPanel from '@/components/HeaderPanel.vue';
-import FooterPanel from '@/components/FooterPanel.vue';
-
-
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
