@@ -38,43 +38,12 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
 import { composable } from '@/state/composable';
-import { user } from '@/state/user';
-import router from '@/router/index.ts';
+
 import { QuizzService } from '@/services/QuizzService.ts';
-import { ref } from 'vue';
 
 const { PreviewQuizz } = composable();
-const { userProfile } = user();
 
 const quizzService: QuizzService = new QuizzService();
-
-const itemList = ref([]);
-
-function backToCreate() {
-  router.push('/create');
-}
-
-function createItemList() {
-  PreviewQuizz.value.categories.forEach((cat) => {
-    cat.items.forEach((item) => {
-      itemList.value.push({ category: cat.name, name: item.name });
-    });
-  });
-}
-
-async function saveQuizz() {
-  createItemList();
-  console.log('userid  ', userProfile.value.userid);
-  const res = await quizzService.createQuizz({
-    name: PreviewQuizz.value.name,
-    timer: PreviewQuizz.value.time,
-    theme: PreviewQuizz.value.theme.name,
-    description: PreviewQuizz.value.description,
-    thumbnail: PreviewQuizz.value.thumbnail,
-    items: itemList.value,
-    user: userProfile.value.userid,
-  });
-}
 </script>
 
 <style lang="scss">

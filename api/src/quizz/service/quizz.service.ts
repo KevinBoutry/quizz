@@ -17,15 +17,37 @@ export class QuizzService {
     return await this.QuizzRepository.find();
   }
 
+  async getByTheme(theme): Promise<Quizz[]> {
+    return await this.QuizzRepository.find({
+      where: {
+        theme,
+      },
+    });
+  }
+
+  async getById(id): Promise<Quizz> {
+    return await this.QuizzRepository.find({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async getItemsById(id): Promise<Item[]> {
+    return await this.QuizzRepository.find({
+      where: {
+        id,
+      },
+    });
+  }
+
   async create(createQuizzDto: CreateQuizzDto): Promise<CreateQuizzDto> {
-    console.log('jarrive au service', createQuizzDto);
     const quizz = await this.QuizzRepository.save(createQuizzDto);
     createQuizzDto.items.forEach(async (items) => {
-      console.log(quizz.id);
       const currentItem: CreateItemDto = {
         name: items.name,
         category: items.category,
-        quizzId: quizz.id,
+        quizz: quizz.id,
       };
       await this.ItemRepository.save(currentItem);
     });

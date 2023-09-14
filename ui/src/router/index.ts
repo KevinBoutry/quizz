@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import CreateQuizzViewVue from '@/views/CreateQuizzView.vue';
 import HomeViewVue from '@/views/HomeView.vue';
 import ProfileViewVue from '@/views/ProfileView.vue';
+import QuizzListViewVue from '@/views/QuizzListView.vue';
+import QuizzPlayViewVue from '@/views/QuizzPlayView.vue';
 import QuizzPreviewViewVue from '@/views/QuizzPreviewView.vue';
 import TestViewVue from '@/views/TestView.vue';
 
@@ -33,6 +35,16 @@ const router = createRouter({
       path: '/preview',
       name: 'preview',
       component: QuizzPreviewViewVue,
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: QuizzListViewVue,
+    },
+    {
+      path: '/quizz/:id',
+      name: 'quizz',
+      component: QuizzPlayViewVue,
     },
   ],
 });

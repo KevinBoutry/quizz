@@ -7,7 +7,9 @@
           HOME
         </RouterLink>
       </div>
-      <div>QUIZZ</div>
+      <div>
+        <RouterLink to="/list"> QUIZZ </RouterLink>
+      </div>
       <div v-if="isLogged">
         <RouterLink to="create"> CREER </RouterLink>
       </div>

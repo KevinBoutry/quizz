@@ -7,5 +7,5 @@ export class CreateItemDto {
   category: string;
 
   @IsNotEmpty()
-  quizzId: number;
+  quizz: any;
 }

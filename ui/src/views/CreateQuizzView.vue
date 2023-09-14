@@ -38,10 +38,7 @@
       </div>
       <CategoryPanel />
     </div>
-    <div
-      class="preview"
-      :style="`background-image : url('${PreviewQuizz.thumbnail}' )`"
-    >
+    <div class="preview" :style="`background-image : url('${thumbnail}' )`">
       {{ PreviewQuizz.name }}
     </div>
     <Button label="PREVIEW" class="preview-button" @click="createPreview" />
@@ -60,12 +57,25 @@ import CategoryPanel from '@/components/CategoryPanel.vue';
 import { composable } from '@/state/composable';
 import { theme } from '@/state/theme';
 import router from '@/router/index.ts';
+import { ref } from 'vue';
 
 const { PreviewQuizz } = composable();
 const { Theme } = theme();
 
-const imagePreview = (event: any) => {
-  PreviewQuizz.value.thumbnail = event.files[0].objectURL;
+const thumbnail = ref();
+
+// async function blobToBase64(blob) {
+//   return new Promise((resolve, _) => {
+//     const reader = new FileReader();
+//     reader.onloadend = () => resolve(reader.result);
+//     reader.readAsDataURL(blob);
+//   });
+// }
+
+const imagePreview = async (event: any) => {
+  thumbnail.value = event.files[0].objectURL;
+  const blob = await (await fetch(event.files[0].objectURL)).blob();
+  PreviewQuizz.value.thumbnail = blob;
 };
 
 function createPreview() {
