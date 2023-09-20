@@ -41,9 +41,7 @@ const selectedTheme = ref();
 const quizzList = ref();
 
 async function loadQuizzList() {
-  console.log(selectedTheme.value.name);
   quizzList.value = await quizzService.getByTheme(selectedTheme.value.name);
-  console.log(quizzList.value);
 }
 
 function goToQuizz(id) {

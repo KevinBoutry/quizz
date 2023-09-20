@@ -1,34 +1,26 @@
 <template>
-  <div class="preview">
-    <h1 class="quizz-title">{{ PreviewQuizz.name }}</h1>
-    <h3 class="quizz-theme">{{ PreviewQuizz.theme.name }}</h3>
-    <div class="quizz-description">{{ PreviewQuizz.description }}</div>
+  <div class="preview" v-if="quizz">
+    <h1 class="quizz-title">{{ quizz.name }}</h1>
+    <h3 class="quizz-theme">{{ quizz.theme }}</h3>
+    <div class="quizz-description">{{ quizz.description }}</div>
     <div class="input-timer">
-      <InputText
-        class="text-input"
-        placeholder="Type your answers here"
-        disabled
-      />
-      <div class="quizz-timer">{{ PreviewQuizz.time }}</div>
+      <InputText class="text-input" placeholder="Type your answers here" />
+      <div class="quizz-timer">{{ minutes }} : {{ seconds }}</div>
     </div>
-    <Button label="START" class="start-button" disabled />
+    <Button label="START" class="start-button" @click="startGame" />
     <div class="quizz-container">
       <div
         class="category-container"
-        v-for="category in PreviewQuizz.categories"
-        :key="category.id"
+        v-for="category in categories"
+        :key="category"
       >
         <div class="category-title">
-          {{ category.name }}
+          {{ category }}
         </div>
         <div v-for="item in category.items" :key="item.id">
           <span class="items"> {{ item.name }}</span>
         </div>
       </div>
-    </div>
-    <div class="bottom-buttons">
-      <Button label="BACK" class="bottom-button" @click="backToCreate" />
-      <Button label="SAVE" class="bottom-button" @click="saveQuizz" />
     </div>
   </div>
 </template>
@@ -37,13 +29,51 @@
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
-import { composable } from '@/state/composable';
-
 import { QuizzService } from '@/services/QuizzService.ts';
+import { onMounted, ref } from 'vue';
 
-const { PreviewQuizz } = composable();
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const quizz = ref();
+const categories = ref();
+
+const minutes = ref();
+const seconds = ref();
 
 const quizzService: QuizzService = new QuizzService();
+
+function startGame() {
+  if (minutes.value != 0 && seconds.value != 0) {
+    setInterval(() => {
+      if (seconds.value != 0) {
+        seconds.value--;
+      }
+      if (minutes.value != 0 && seconds.value === 0) {
+        minutes.value--;
+        seconds.value = 59;
+      }
+    }, 1000);
+  }
+}
+
+onMounted(async () => {
+  quizz.value = await quizzService.getById(route.params.id);
+  const categorySet = new Set();
+  quizz.value.items.forEach((item) => {
+    categorySet.add(item.category);
+  });
+  categories.value = Array.from(categorySet);
+  minutes.value =
+    Math.floor(quizz.value.timer / 60) > 0
+      ? Math.floor(quizz.value.timer / 60)
+      : '00';
+  seconds.value =
+    quizz.value.timer % 60 > 9
+      ? quizz.value.timer % 60
+      : '0' + [quizz.value.timer % 60];
+});
 </script>
 
 <style lang="scss">

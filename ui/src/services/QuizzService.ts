@@ -13,6 +13,10 @@ export class QuizzService {
   };
 
   public getByTheme = async (theme) => {
-    return await this.http.instance.get(`/quizz/${theme}`);
+    return await this.http.instance.get(`/quizz/themes/${theme}`);
+  };
+
+  public getById = async (id) => {
+    return await this.http.instance.get(`/quizz/${id}`);
   };
 }

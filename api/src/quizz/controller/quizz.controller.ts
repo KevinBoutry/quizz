@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { QuizzService } from '../service/quizz.service';
 import { CreateQuizzDto } from '../dto/quizz.dto';
 import { Quizz } from '../quizz.entity';
+import { Item } from '../item.entity';
 
 @Controller('quizz')
 export class QuizzController {
@@ -12,15 +13,21 @@ export class QuizzController {
     return await this.QuizzService.getAll();
   }
 
-  @Get(':theme')
+  @Get(':id')
+  async getById(@Param('id') id: number): Promise<Quizz> {
+    console.log(id);
+    return await this.QuizzService.getById(id);
+  }
+
+  @Get('themes/:theme')
   async getByTheme(@Param('theme') theme: string): Promise<Quizz[]> {
     return await this.QuizzService.getByTheme(theme);
   }
 
-  @Get(':id')
-  async getById(@Param('id') id: number): Promise<Quizz> {
-    return await this.QuizzService.getById(id);
-  }
+  //   @Get(':id/items')
+  //   async getItemsById(@Param('id') id: number): Promise<Item[]> {
+  //     return await this.QuizzService.getItemsById(id);
+  //   }
 
   @Post('create')
   async create(

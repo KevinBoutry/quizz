@@ -26,19 +26,20 @@ export class QuizzService {
   }
 
   async getById(id): Promise<Quizz> {
-    return await this.QuizzRepository.find({
-      where: {
-        id,
-      },
+    const quizz = await this.QuizzRepository.findOneBy({
+      id,
     });
-  }
-
-  async getItemsById(id): Promise<Item[]> {
-    return await this.QuizzRepository.find({
-      where: {
-        id,
-      },
-    });
+    if (quizz) {
+      quizz.items = await this.ItemRepository.find({
+        relations: ['quizz'],
+        where: {
+          quizz: {
+            id,
+          },
+        },
+      });
+    }
+    return quizz;
   }
 
   async create(createQuizzDto: CreateQuizzDto): Promise<CreateQuizzDto> {
