@@ -4,21 +4,35 @@
     <h3 class="quizz-theme">{{ quizz.theme }}</h3>
     <div class="quizz-description">{{ quizz.description }}</div>
     <div class="input-timer">
-      <InputText class="text-input" placeholder="Type your answers here" />
-      <div class="quizz-timer">{{ minutes }} : {{ seconds }}</div>
+      <InputText
+        class="text-input"
+        placeholder="Type your answers here"
+        :disabled="!gameStarted"
+        v-model="input"
+      />
+      <div class="quizz-timer">
+        {{ minutes }} : <span v-if="seconds < 10">0</span>{{ seconds }}
+      </div>
     </div>
-    <Button label="START" class="start-button" @click="startGame" />
+    <Button
+      label="START"
+      class="start-button"
+      @click="startGame"
+      :disabled="gameStarted"
+    />
     <div class="quizz-container">
       <div
         class="category-container"
-        v-for="category in categories"
+        v-for="category in foundItems"
         :key="category"
       >
-        <div class="category-title">
-          {{ category }}
-        </div>
-        <div v-for="item in category.items" :key="item.id">
-          <span class="items"> {{ item.name }}</span>
+        <div>
+          <div class="category-title">
+            {{ category.category }}
+          </div>
+          <div class="answer" v-for="items in category.items" :key="items">
+            {{ items }}
+          </div>
         </div>
       </div>
     </div>
@@ -30,21 +44,26 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
 import { QuizzService } from '@/services/QuizzService.ts';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
 const quizz = ref();
-const categories = ref();
 
 const minutes = ref();
 const seconds = ref();
 
+const gameStarted = ref(false);
+const input = ref();
+
+const foundItems = ref([]);
+
 const quizzService: QuizzService = new QuizzService();
 
 function startGame() {
+  gameStarted.value = true;
   if (minutes.value != 0 && seconds.value != 0) {
     setInterval(() => {
       if (seconds.value != 0) {
@@ -58,13 +77,29 @@ function startGame() {
   }
 }
 
+watch(input, () => {
+  quizz.value.categories.forEach((cat) => {
+    const found = cat.items.find(
+      (item) => item.toLowerCase() === input.value.toLowerCase()
+    );
+    if (found) {
+      const idx = foundItems.value.findIndex(
+        (ctg) => ctg.category === cat.catName
+      );
+      if (!foundItems.value[idx].items.includes(found)) {
+        foundItems.value[idx].items.push(found);
+      }
+    }
+  });
+  console.log(foundItems.value);
+});
+
 onMounted(async () => {
   quizz.value = await quizzService.getById(route.params.id);
-  const categorySet = new Set();
-  quizz.value.items.forEach((item) => {
-    categorySet.add(item.category);
+  console.log(quizz.value);
+  quizz.value.categories.forEach((cat) => {
+    foundItems.value.push({ category: cat.catName, items: [] });
   });
-  categories.value = Array.from(categorySet);
   minutes.value =
     Math.floor(quizz.value.timer / 60) > 0
       ? Math.floor(quizz.value.timer / 60)
@@ -137,7 +172,7 @@ onMounted(async () => {
         font-weight: bold;
       }
 
-      .items {
+      .answer {
         color: grey;
         padding: 5px;
       }

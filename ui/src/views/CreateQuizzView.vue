@@ -75,6 +75,7 @@ const thumbnail = ref();
 const imagePreview = async (event: any) => {
   thumbnail.value = event.files[0].objectURL;
   const blob = await (await fetch(event.files[0].objectURL)).blob();
+  console.log(blob);
   PreviewQuizz.value.thumbnail = blob;
 };
 

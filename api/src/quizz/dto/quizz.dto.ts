@@ -15,8 +15,6 @@ export class CreateQuizzDto {
 
   description: string;
 
-  thumbnail: string;
-
   createdAt: Date;
 
   items: Array<Record<string, any>>;

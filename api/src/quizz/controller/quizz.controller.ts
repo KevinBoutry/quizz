@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
 import { QuizzService } from '../service/quizz.service';
 import { CreateQuizzDto } from '../dto/quizz.dto';
 import { Quizz } from '../quizz.entity';
 import { Item } from '../item.entity';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('quizz')
 export class QuizzController {
@@ -30,9 +39,9 @@ export class QuizzController {
   //   }
 
   @Post('create')
-  async create(
-    @Body() createQuizzDto: CreateQuizzDto,
-  ): Promise<CreateQuizzDto> {
-    return await this.QuizzService.create(createQuizzDto);
+  @UseInterceptors(FilesInterceptor('image'))
+  async create(@UploadedFiles() image, @Body('data') data) {
+    console.log(data);
+    return await this.QuizzService.create(image, JSON.parse(data));
   }
 }

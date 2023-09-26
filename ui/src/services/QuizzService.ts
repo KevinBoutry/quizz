@@ -8,7 +8,15 @@ export class QuizzService {
   }
 
   public createQuizz = async (data) => {
-    const quizz = await this.http.instance.post('/quizz/create', data);
+    const formData = new FormData();
+    formData.append('image', data.thumbnail, 'thumbnail.png');
+    const dataCopy = { ...data };
+    delete dataCopy.thumbnail;
+    formData.append('data', JSON.stringify(dataCopy));
+    const quizz = await this.http.instance.post('/quizz/create', formData, {
+      headers: { ContentType: 'multipart/form-data' },
+    });
+
     return quizz;
   };
 

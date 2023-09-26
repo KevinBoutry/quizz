@@ -31,9 +31,6 @@ export class Quizz {
   @Column()
   theme: string;
 
-  @Column({ nullable: true })
-  thumbnail: string;
-
   @Column({ default: 0 })
   timeplayed: number;
 
