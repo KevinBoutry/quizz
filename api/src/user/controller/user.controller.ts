@@ -29,9 +29,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('me')
-  async getProfile(@Request() req) {
-    console.log('');
-  }
+  async getProfile(@Request() req) {}
 
   @Get(':userid')
   async getOne(@Param('userid', ParseIntPipe) userid: number): Promise<User> {

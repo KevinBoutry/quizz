@@ -7,42 +7,61 @@
       <InputText
         class="text-input"
         placeholder="Type your answers here"
-        :disabled="!gameStarted"
+        :disabled="!gameStarted || gameEnded"
         v-model="input"
       />
       <div class="quizz-timer">
         {{ minutes }} : <span v-if="seconds < 10">0</span>{{ seconds }}
       </div>
     </div>
-    <Button
-      label="START"
-      class="start-button"
-      @click="startGame"
-      :disabled="gameStarted"
-    />
+    <div class="button-score">
+      <Button label="START" @click="startGame" :disabled="gameStarted" />
+      <div class="score">{{ currentScore }} / {{ quizz.maxScore }}</div>
+      <Button
+        label="FORFEIT"
+        severity="danger"
+        @click="endGame"
+        :disabled="!gameStarted"
+      />
+    </div>
     <div class="quizz-container">
       <div
         class="category-container"
-        v-for="category in foundItems"
+        v-for="(category, index) in quizz.categories"
         :key="category"
       >
         <div>
           <div class="category-title">
-            {{ category.category }}
+            {{ category.catName }}
           </div>
-          <div class="answer" v-for="items in category.items" :key="items">
-            {{ items }}
+          <div class="answer" v-for="item in category.items" :key="item">
+            <span
+              v-if="
+                item ===
+                foundItems[index].items.find((current) => current === item)
+              "
+              >{{ item }}</span
+            >
+            <Skeleton v-else />
           </div>
         </div>
       </div>
     </div>
   </div>
+  <GameEndPanel
+    v-if="gameEnded"
+    :score="currentScore"
+    :maxScore="quizz.maxScore"
+    :time="timePlayed"
+    :win="win"
+  />
 </template>
 
 <script lang="ts" setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
+import GameEndPanel from '@/components/GameEndPanel.vue';
 import { QuizzService } from '@/services/QuizzService.ts';
 import { onMounted, ref, watch } from 'vue';
 
@@ -52,10 +71,15 @@ const route = useRoute();
 
 const quizz = ref();
 
+const currentScore = ref(0);
+const timePlayed = ref(0);
+
 const minutes = ref();
 const seconds = ref();
 
 const gameStarted = ref(false);
+const gameEnded = ref(false);
+const win = ref(false);
 const input = ref();
 
 const foundItems = ref([]);
@@ -64,17 +88,31 @@ const quizzService: QuizzService = new QuizzService();
 
 function startGame() {
   gameStarted.value = true;
-  if (minutes.value != 0 && seconds.value != 0) {
-    setInterval(() => {
-      if (seconds.value != 0) {
-        seconds.value--;
-      }
-      if (minutes.value != 0 && seconds.value === 0) {
-        minutes.value--;
-        seconds.value = 59;
-      }
-    }, 1000);
-  }
+  const intervalID = setInterval(() => {
+    if (currentScore.value === quizz.value.maxScore) {
+      win.value = true;
+      endGame();
+    }
+    if (seconds.value != 0) {
+      seconds.value--;
+      timePlayed.value++;
+    }
+    if (minutes.value != 0 && seconds.value === 0) {
+      minutes.value--;
+      seconds.value = 59;
+      timePlayed.value++;
+    }
+    if (minutes.value === 0 && seconds.value === 0) {
+      clearInterval(intervalID);
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  gameEnded.value = true;
+  minutes.value = 0;
+  seconds.value = 0;
 }
 
 watch(input, () => {
@@ -88,15 +126,15 @@ watch(input, () => {
       );
       if (!foundItems.value[idx].items.includes(found)) {
         foundItems.value[idx].items.push(found);
+        currentScore.value++;
+        input.value = '';
       }
     }
   });
-  console.log(foundItems.value);
 });
 
 onMounted(async () => {
   quizz.value = await quizzService.getById(route.params.id);
-  console.log(quizz.value);
   quizz.value.categories.forEach((cat) => {
     foundItems.value.push({ category: cat.catName, items: [] });
   });
@@ -104,14 +142,11 @@ onMounted(async () => {
     Math.floor(quizz.value.timer / 60) > 0
       ? Math.floor(quizz.value.timer / 60)
       : '00';
-  seconds.value =
-    quizz.value.timer % 60 > 9
-      ? quizz.value.timer % 60
-      : '0' + [quizz.value.timer % 60];
+  seconds.value = quizz.value.timer % 60;
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .preview {
   height: 90%;
   background-color: #424b54;
@@ -148,17 +183,27 @@ onMounted(async () => {
     }
   }
 
-  .start-button {
-    left: 50%;
-    transform: translateX(-50%);
+  .button-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .score {
+      font-size: 3rem;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
   }
   .quizz-container {
     display: flex;
     justify-content: space-around;
     padding-top: 50px;
+    z-index: 2;
 
     .category-container {
+      position: relative;
       width: 25%;
+      height: fit-content;
       max-width: 200px;
       border-radius: 5px;
       display: flex;
@@ -171,20 +216,11 @@ onMounted(async () => {
         font-size: 1.3rem;
         font-weight: bold;
       }
-
-      .answer {
-        color: grey;
-        padding: 5px;
-      }
     }
-  }
-
-  .bottom-buttons {
-    position: absolute;
-    width: 100%;
-    bottom: 5%;
-    display: flex;
-    justify-content: space-around;
+    .answer {
+      color: grey;
+      padding: 5px;
+    }
   }
 }
 </style>

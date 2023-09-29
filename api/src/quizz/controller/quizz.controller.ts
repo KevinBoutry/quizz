@@ -24,7 +24,6 @@ export class QuizzController {
 
   @Get(':id')
   async getById(@Param('id') id: number): Promise<Quizz> {
-    console.log(id);
     return await this.QuizzService.getById(id);
   }
 
@@ -41,7 +40,6 @@ export class QuizzController {
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
   async create(@UploadedFiles() image, @Body('data') data) {
-    console.log(data);
     return await this.QuizzService.create(image, JSON.parse(data));
   }
 }

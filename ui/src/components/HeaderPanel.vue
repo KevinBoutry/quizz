@@ -82,7 +82,6 @@ onMounted(async () => {
     const user = await userService.getUser();
     userProfile.value.username = user.username;
     userProfile.value.userid = user.sub;
-    console.log(userProfile.value);
   }
 });
 </script>

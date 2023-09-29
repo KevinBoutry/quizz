@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" @keyup.enter="validate">
     <h2>Login</h2>
     <div class="inputblock">
       <p>Username or Email :</p>
@@ -47,7 +47,6 @@ const userCredentials = reactive({
 const userService: UserService = new UserService();
 
 async function validate() {
-  console.log('yoh');
   await userService.handleLogin(userCredentials);
 }
 </script>

@@ -29,7 +29,6 @@ export class UserService {
     await this.http.instance
       .post('/auth/login', userCredentials)
       .then((res) => {
-        console.log(res);
         success.value = true;
         if (res.access_token) {
           localStorage.setItem('user', JSON.stringify(res));

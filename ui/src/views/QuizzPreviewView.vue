@@ -64,7 +64,6 @@ function createItemList() {
 
 async function saveQuizz() {
   createItemList();
-  console.log('userid  ', userProfile.value.userid);
   const res = await quizzService.createQuizz({
     name: PreviewQuizz.value.name,
     timer: PreviewQuizz.value.time,
@@ -77,7 +76,7 @@ async function saveQuizz() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .preview {
   height: 90%;
   background-color: #424b54;

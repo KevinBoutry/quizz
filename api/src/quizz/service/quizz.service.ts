@@ -40,9 +40,11 @@ export class QuizzService {
         },
       });
     }
+    const maxScore = tempQuizz.items.length;
     const quizz = {
       ...tempQuizz,
       categories: [],
+      maxScore,
     };
     delete quizz.items;
 
@@ -73,7 +75,6 @@ export class QuizzService {
       };
       await this.ItemRepository.save(currentItem);
     });
-    console.log(image);
     const quizz = { ...savedQuizz, thumbnail: null };
     const path = './upload/thumbnails';
     const filePath = `${path}/${savedQuizz.id}.png`;
@@ -83,8 +84,6 @@ export class QuizzService {
       const imageBuffer = fs.readFileSync(filePath);
       quizz.thumbnail = imageBuffer;
     }
-
-    console.log(quizz);
     return quizz;
   }
 }
