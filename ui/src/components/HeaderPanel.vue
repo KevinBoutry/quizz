@@ -82,6 +82,9 @@ onMounted(async () => {
     const user = await userService.getUser();
     userProfile.value.username = user.username;
     userProfile.value.userid = user.sub;
+    setInterval(async () => {
+      await userService.getUser();
+    }, 1800000);
   }
 });
 </script>

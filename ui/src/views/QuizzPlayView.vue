@@ -60,6 +60,8 @@
 <script lang="ts" setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import FuzzySet from 'fuzzyset.js';
+import debounce from 'lodash.debounce';
 
 import GameEndPanel from '@/components/GameEndPanel.vue';
 import { QuizzService } from '@/services/QuizzService.ts';
@@ -83,6 +85,8 @@ const win = ref(false);
 const input = ref();
 
 const foundItems = ref([]);
+const itemList = ref([]);
+let fs: any;
 
 const quizzService: QuizzService = new QuizzService();
 
@@ -115,29 +119,34 @@ function endGame() {
   seconds.value = 0;
 }
 
-watch(input, () => {
-  quizz.value.categories.forEach((cat) => {
-    const found = cat.items.find(
-      (item) => item.toLowerCase() === input.value.toLowerCase()
-    );
+watch(
+  input,
+  debounce(() => {
+    const found = fs.get(input.value, undefined, 0.8);
     if (found) {
-      const idx = foundItems.value.findIndex(
-        (ctg) => ctg.category === cat.catName
-      );
-      if (!foundItems.value[idx].items.includes(found)) {
-        foundItems.value[idx].items.push(found);
-        currentScore.value++;
-        input.value = '';
-      }
+      quizz.value.categories.forEach((cat, index) => {
+        const foundCat = cat.items.find(
+          (item) => item.toLowerCase() === found[0][1].toLowerCase()
+        );
+        if (foundCat) {
+          if (!foundItems.value[index].items.includes(found[0][1])) {
+            foundItems.value[index].items.push(found[0][1]);
+            currentScore.value++;
+            input.value = '';
+          }
+        }
+      });
     }
-  });
-});
+  }, 300)
+);
 
 onMounted(async () => {
   quizz.value = await quizzService.getById(route.params.id);
   quizz.value.categories.forEach((cat) => {
     foundItems.value.push({ category: cat.catName, items: [] });
+    itemList.value = itemList.value.concat(cat.items);
   });
+  fs = FuzzySet(itemList.value);
   minutes.value =
     Math.floor(quizz.value.timer / 60) > 0
       ? Math.floor(quizz.value.timer / 60)

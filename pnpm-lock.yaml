@@ -140,9 +140,18 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.4.0
+      fuzzyset.js:
+        specifier: ^1.0.7
+        version: 1.0.7
       jsonwebtoken:
         specifier: ^9.0.0
         version: 9.0.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      lodash.debounce:
+        specifier: ^4.0.8
+        version: 4.0.8
       pinia:
         specifier: ^2.0.32
         version: 2.0.32(typescript@4.8.4)(vue@3.2.47)
@@ -3978,6 +3987,11 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: true
 
+  /fuzzyset.js@1.0.7:
+    resolution: {integrity: sha512-SmfOVSiPjbyC17m1i86wFq+jmkGioqlY/amT6RZzq4hPTGJFWFF2voUe88zrq/zDbehFnSJFtu6kqTUCw1caKQ==}
+    engines: {node: '>= 0.4.0'}
+    dev: false
+
   /gauge@3.0.2:
     resolution: {integrity: sha512-+5J6MS/5XksCuXq++uFRsnUd7Ovu1XenbeuIuNRJxYWjgQbPuFhT14lAvsWfqfAmnwluf1OwMjz39HjfLPci0Q==}
     engines: {node: '>=10'}
@@ -5263,6 +5277,10 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
 
   /lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}

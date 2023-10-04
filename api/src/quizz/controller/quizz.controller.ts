@@ -28,7 +28,7 @@ export class QuizzController {
   }
 
   @Get('themes/:theme')
-  async getByTheme(@Param('theme') theme: string): Promise<Quizz[]> {
+  async getByTheme(@Param('theme') theme: string) {
     return await this.QuizzService.getByTheme(theme);
   }
 

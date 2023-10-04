@@ -18,12 +18,25 @@ export class QuizzService {
     return await this.QuizzRepository.find();
   }
 
-  async getByTheme(theme): Promise<Quizz[]> {
-    return await this.QuizzRepository.find({
+  getThumbnail(id) {
+    const path = './upload/thumbnails';
+    if (fs.existsSync(path)) {
+      return fs.readFileSync(`${path}/${id}.png`);
+    }
+  }
+
+  async getByTheme(theme) {
+    const quizzes = await this.QuizzRepository.find({
       where: {
         theme,
       },
     });
+    const result = quizzes.map((current) => {
+      return { ...current, thumbnail: this.getThumbnail(current.id) };
+    });
+    console.log('quizz', quizzes);
+    console.log('result', result);
+    return result;
   }
 
   async getById(id) {

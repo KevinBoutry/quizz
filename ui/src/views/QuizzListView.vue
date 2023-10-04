@@ -15,7 +15,9 @@
       <div v-for="quizz in quizzList" :key="quizz.id">
         <div
           class="quizz-box"
-          :style="`background-image : url('${quizz.thumbnail}' )`"
+          :style="`background-image : url('${imageDataUrl(
+            quizz.thumbnail.data
+          )}' )`"
           @click="goToQuizz(quizz.id)"
         >
           {{ quizz.name }}
@@ -42,6 +44,17 @@ const quizzList = ref();
 
 async function loadQuizzList() {
   quizzList.value = await quizzService.getByTheme(selectedTheme.value.name);
+  console.log(quizzList.value);
+}
+
+function imageDataUrl(data: any) {
+  // Create a Blob from the buffer data
+  const blob = new Blob([new Uint8Array(data)], {
+    type: 'image/jpeg', // Replace with the appropriate image type (e.g., 'image/png', 'image/jpeg')
+  });
+
+  // Create a data URL from the Blob
+  return URL.createObjectURL(blob);
 }
 
 function goToQuizz(id) {

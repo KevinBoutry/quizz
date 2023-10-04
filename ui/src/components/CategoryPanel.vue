@@ -21,9 +21,18 @@
             @deleteItem="deleteItem"
           />
         </div>
-        <Button label="Add Row" @click="addRow(cat.id)" />
+        <Button
+          icon="pi pi-plus"
+          text
+          severity="secondary"
+          @click="addRow(cat.id)"
+        />
       </div>
-      <Button label="DELETE" @click="deleteCategory(cat.id)" />
+      <Button
+        icon="pi pi-trash"
+        class="delbutton"
+        @click="deleteCategory(cat.id)"
+      />
     </div>
   </div>
 </template>
@@ -95,19 +104,34 @@ function deleteItem(selectedItem) {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 50px;
 
   .category-container {
     width: 20vw;
     max-width: 250px;
-    background-color: #c5baaf;
+    background-color: #ebcfb2;
     border-radius: 5px;
     margin-top: 10px;
 
     .category-title {
-      color: red;
+      color: black;
       font-size: 1.3rem;
       text-align: center;
       font-weight: bold;
+      width: fit-content;
+      min-width: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 5px;
+      border: black solid 1px;
+      padding: 5px;
+      top: -20px;
+      background-color: #c5baaf;
+    }
+    .delbutton {
+      background-color: #e22c2c;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

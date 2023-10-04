@@ -38,8 +38,16 @@
       </div>
       <CategoryPanel />
     </div>
-    <div class="preview" :style="`background-image : url('${thumbnail}' )`">
-      {{ PreviewQuizz.name }}
+    <div class="preview">
+      <div
+        :style="`color: #${textColor}; background-image : url('${thumbnail}');`"
+      >
+        {{ PreviewQuizz.name }}
+      </div>
+      <div class="text-color">
+        <span class="text-color-text">Text color :</span>
+        <ColorPicker v-model="textColor" />
+      </div>
     </div>
     <Button label="PREVIEW" class="preview-button" @click="createPreview" />
   </div>
@@ -51,6 +59,7 @@ import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+import ColorPicker from 'primevue/colorpicker';
 
 import CategoryPanel from '@/components/CategoryPanel.vue';
 
@@ -63,14 +72,7 @@ const { PreviewQuizz } = composable();
 const { Theme } = theme();
 
 const thumbnail = ref();
-
-// async function blobToBase64(blob) {
-//   return new Promise((resolve, _) => {
-//     const reader = new FileReader();
-//     reader.onloadend = () => resolve(reader.result);
-//     reader.readAsDataURL(blob);
-//   });
-// }
+const textColor = ref();
 
 const imagePreview = async (event: any) => {
   thumbnail.value = event.files[0].objectURL;
@@ -125,7 +127,6 @@ function createPreview() {
     width: 400px;
     height: 250px;
     background-color: black;
-    color: white;
     text-align: center;
     font-size: 2rem;
     display: flex;
@@ -135,6 +136,15 @@ function createPreview() {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+
+    .text-color {
+      top: 150px;
+      font-size: 1rem;
+
+      .text-color-text {
+        margin-right: 5px;
+      }
+    }
   }
 
   .preview-button {
@@ -144,6 +154,10 @@ function createPreview() {
     bottom: 30px;
     width: 10vw;
     height: 5vh;
+  }
+
+  .category-panel {
+    margin-top: 50px;
   }
 }
 </style>
