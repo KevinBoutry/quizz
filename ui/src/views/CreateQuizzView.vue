@@ -38,16 +38,17 @@
       </div>
       <CategoryPanel />
     </div>
-    <div class="preview">
-      <div
-        :style="`color: #${textColor}; background-image : url('${thumbnail}');`"
-      >
+    <div
+      class="preview"
+      :style="`color: #${PreviewQuizz.textColor}; background-image : url('${thumbnail}');`"
+    >
+      <div class="preview-text">
         {{ PreviewQuizz.name }}
       </div>
-      <div class="text-color">
-        <span class="text-color-text">Text color :</span>
-        <ColorPicker v-model="textColor" />
-      </div>
+    </div>
+    <div class="text-color">
+      <span class="text-color-text">Text color :</span>
+      <ColorPicker v-model="PreviewQuizz.textColor" />
     </div>
     <Button label="PREVIEW" class="preview-button" @click="createPreview" />
   </div>
@@ -72,7 +73,6 @@ const { PreviewQuizz } = composable();
 const { Theme } = theme();
 
 const thumbnail = ref();
-const textColor = ref();
 
 const imagePreview = async (event: any) => {
   thumbnail.value = event.files[0].objectURL;
@@ -81,6 +81,7 @@ const imagePreview = async (event: any) => {
 };
 
 function createPreview() {
+  console.log(PreviewQuizz.value);
   router.push('/preview');
 }
 </script>
@@ -137,13 +138,18 @@ function createPreview() {
     background-repeat: no-repeat;
     background-position: center;
 
-    .text-color {
-      top: 150px;
-      font-size: 1rem;
+    .preview-text {
+      text-shadow: 2px 2px 2px black;
+    }
+  }
+  .text-color {
+    position: absolute;
+    top: 280px;
+    right: 300px;
+    font-size: 1rem;
 
-      .text-color-text {
-        margin-right: 5px;
-      }
+    .text-color-text {
+      margin-right: 5px;
     }
   }
 

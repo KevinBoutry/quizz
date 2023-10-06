@@ -15,6 +15,8 @@ export class CreateQuizzDto {
 
   description: string;
 
+  textColor: string;
+
   createdAt: Date;
 
   items: Array<Record<string, any>>;

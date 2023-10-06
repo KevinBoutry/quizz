@@ -22,6 +22,11 @@ export class QuizzController {
     return await this.QuizzService.getAll();
   }
 
+  @Get('recent')
+  async getRecent() {
+    return await this.QuizzService.getRecent();
+  }
+
   @Get(':id')
   async getById(@Param('id') id: number): Promise<Quizz> {
     return await this.QuizzService.getById(id);
@@ -40,6 +45,7 @@ export class QuizzController {
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
   async create(@UploadedFiles() image, @Body('data') data) {
+    console.log(data);
     return await this.QuizzService.create(image, JSON.parse(data));
   }
 }

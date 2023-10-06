@@ -34,8 +34,18 @@ export class QuizzService {
     const result = quizzes.map((current) => {
       return { ...current, thumbnail: this.getThumbnail(current.id) };
     });
-    console.log('quizz', quizzes);
-    console.log('result', result);
+    return result;
+  }
+
+  async getRecent() {
+    const quizzes = await this.QuizzRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const result = quizzes.map((current) => {
+      return { ...current, thumbnail: this.getThumbnail(current.id) };
+    });
     return result;
   }
 

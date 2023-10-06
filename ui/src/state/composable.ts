@@ -11,6 +11,7 @@ const PreviewQuizz = ref({
   time: 0,
   thumbnail: '',
   categories: [],
+  textColor: '',
 });
 
 export function composable() {

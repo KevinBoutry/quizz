@@ -27,4 +27,8 @@ export class QuizzService {
   public getById = async (id) => {
     return await this.http.instance.get(`/quizz/${id}`);
   };
+
+  public getByRecent = async () => {
+    return await this.http.instance.get('/quizz/recent');
+  };
 }

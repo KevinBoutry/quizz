@@ -6,9 +6,12 @@
       vos amis
     </p>
   </div>
+  <LastAddedQuizz />
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import LastAddedQuizz from '@/components/LastAddedQuizz.vue';
+</script>
 
 <style lang="scss">
 .presentation {

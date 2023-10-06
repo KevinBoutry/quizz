@@ -21,8 +21,8 @@
         <div class="category-title">
           {{ category.name }}
         </div>
-        <div v-for="item in category.items" :key="item.id">
-          <span class="items"> {{ item.name }}</span>
+        <div v-for="item in category.items" :key="item">
+          <span class="items"> {{ item }}</span>
         </div>
       </div>
     </div>
@@ -57,9 +57,10 @@ function backToCreate() {
 function createItemList() {
   PreviewQuizz.value.categories.forEach((cat) => {
     cat.items.forEach((item) => {
-      itemList.value.push({ category: cat.name, name: item.name });
+      itemList.value.push({ category: cat.name, name: item });
     });
   });
+  console.log(itemList.value);
 }
 
 async function saveQuizz() {
@@ -72,6 +73,7 @@ async function saveQuizz() {
     thumbnail: PreviewQuizz.value.thumbnail,
     items: itemList.value,
     user: userProfile.value.userid,
+    textColor: PreviewQuizz.value.textColor,
   });
 }
 </script>

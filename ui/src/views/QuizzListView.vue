@@ -17,7 +17,7 @@
           class="quizz-box"
           :style="`background-image : url('${imageDataUrl(
             quizz.thumbnail.data
-          )}' )`"
+          )}' ); color : #${quizz.textColor}`"
           @click="goToQuizz(quizz.id)"
         >
           {{ quizz.name }}
