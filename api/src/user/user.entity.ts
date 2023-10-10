@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import { Quizz } from 'src/quizz/quizz.entity';
+import { Score } from 'src/score/score.entity';
 
 @Entity()
 export class User {
@@ -30,4 +31,7 @@ export class User {
 
   @OneToMany(() => Quizz, (quizz) => quizz.user)
   quizzes: Quizz[];
+
+  @OneToMany(() => Score, (score) => score.user)
+  scores: Score[];
 }

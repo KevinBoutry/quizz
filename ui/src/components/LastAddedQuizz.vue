@@ -1,22 +1,22 @@
 <template>
   <div class="container">
+    <h1 class="title">Most Recent</h1>
     <Carousel
-      :value="carousel"
+      :value="carouselItems"
       :numVisible="3"
       :numScroll="1"
       circular
-      :autoplayInterval="3000"
+      v-if="carouselItems"
     >
-      <template #item="carouselItems">
-        <div class="quizz-list">
-          <div
-            class="quizz-box"
-            :style="`background-image : url('${imageDataUrl(
-              carouselItems.data.thumbnail.data
-            )}' ); color : #${carouselItems.data.textColor}`"
-          >
-            {{ carouselItems.data.name }}
-          </div>
+      <template #item="slotProps">
+        <div
+          class="quizz-box"
+          :style="`background-image : url('${imageDataUrl(
+            slotProps.data.thumbnail.data
+          )}' ); color : #${slotProps.data.textColor}`"
+          @click="goToQuizz(slotProps.data.id)"
+        >
+          <h1>{{ slotProps.data.name }}</h1>
         </div>
       </template>
     </Carousel>
@@ -28,11 +28,11 @@ import Carousel from 'primevue/carousel';
 
 import { onMounted, ref } from 'vue';
 import { QuizzService } from '@/services/QuizzService';
+import router from '@/router/index.ts';
 
 const quizzService: QuizzService = new QuizzService();
 
 const carouselItems = ref([]);
-const carousel = ref();
 
 function imageDataUrl(data: any) {
   // Create a Blob from the buffer data
@@ -44,11 +44,14 @@ function imageDataUrl(data: any) {
   return URL.createObjectURL(blob);
 }
 
+function goToQuizz(id) {
+  router.push(`/quizz/${id}`);
+}
+
 onMounted(async () => {
   const quizzes = await quizzService.getByRecent();
-  console.log(quizzes);
-  quizzes.forEach((quizz) => {
-    carouselItems.value.push({ data: quizz, index: quizz.id });
+  quizzes.forEach((quizz, index) => {
+    carouselItems.value.push({ ...quizz, index });
   });
   console.log(carouselItems.value);
 });
@@ -56,8 +59,44 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .container {
-  height: 25vh;
+  height: 35vh;
   width: 100vw;
   background-color: #424b54;
+  overflow-y: hidden;
+
+  .title {
+    text-align: center;
+  }
+}
+
+.quizz-box {
+  justify-self: center;
+  width: 20vw;
+  height: 25vh;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border: black solid 2px;
+  text-align: center;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+</style>
+
+<style lang="scss">
+.p-carousel-item {
+  display: flex;
+  justify-content: center;
 }
 </style>

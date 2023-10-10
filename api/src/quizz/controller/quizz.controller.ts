@@ -37,11 +37,6 @@ export class QuizzController {
     return await this.QuizzService.getByTheme(theme);
   }
 
-  //   @Get(':id/items')
-  //   async getItemsById(@Param('id') id: number): Promise<Item[]> {
-  //     return await this.QuizzService.getItemsById(id);
-  //   }
-
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
   async create(@UploadedFiles() image, @Body('data') data) {

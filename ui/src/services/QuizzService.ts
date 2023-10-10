@@ -31,4 +31,8 @@ export class QuizzService {
   public getByRecent = async () => {
     return await this.http.instance.get('/quizz/recent');
   };
+
+  public publishScore = async (data) => {
+    await this.http.instance.post('score/update', data);
+  };
 }

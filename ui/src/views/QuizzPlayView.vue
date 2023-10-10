@@ -68,8 +68,10 @@ import { QuizzService } from '@/services/QuizzService.ts';
 import { onMounted, ref, watch } from 'vue';
 
 import { useRoute } from 'vue-router';
+import { user } from '@/state/user';
 
 const route = useRoute();
+const { userProfile } = user();
 
 const quizz = ref();
 
@@ -113,10 +115,19 @@ function startGame() {
   }, 1000);
 }
 
-function endGame() {
+async function endGame() {
   gameEnded.value = true;
   minutes.value = 0;
   seconds.value = 0;
+  const data = {
+    score: currentScore.value,
+    maxScore: quizz.value.maxScore,
+    time: timePlayed.value,
+    quizz: quizz.value.id,
+    user: userProfile.value.userid,
+  };
+  console.log(data);
+  await quizzService.publishScore(data);
 }
 
 watch(
@@ -210,25 +221,44 @@ onMounted(async () => {
     z-index: 2;
 
     .category-container {
-      position: relative;
-      width: 25%;
-      height: fit-content;
-      max-width: 200px;
+      width: 20vw;
+      max-width: 250px;
+      background-color: antiquewhite;
       border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-      background-color: white;
+      margin-top: 10px;
+      padding-bottom: 10px;
 
       .category-title {
-        color: red;
-        text-align: center;
+        color: black;
         font-size: 1.3rem;
+        text-align: center;
         font-weight: bold;
+        width: fit-content;
+        min-width: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        border: black solid 1px;
+        padding: 5px;
+        top: -20px;
+        background-color: #c5baaf;
       }
-    }
-    .answer {
-      color: grey;
-      padding: 5px;
+
+      .items-container {
+        display: flex;
+        justify-content: center;
+      }
+      .item-list {
+        display: flex;
+        align-items: center;
+        color: black;
+        padding-left: 10px;
+        justify-content: space-between;
+      }
+      .answer {
+        color: black;
+        padding: 5px;
+      }
     }
   }
 }

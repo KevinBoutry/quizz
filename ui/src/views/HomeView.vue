@@ -16,7 +16,7 @@ import LastAddedQuizz from '@/components/LastAddedQuizz.vue';
 <style lang="scss">
 .presentation {
   position: relative;
-  height: 40vh;
+  height: 30vh;
   width: 100vw;
   background-color: #e22c2c;
   color: white;

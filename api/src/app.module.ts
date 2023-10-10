@@ -1,15 +1,16 @@
-import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/service/auth.service';
-import entities from './user';
 import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
 import { QuizzModule } from './quizz/quizz.module';
-
+import { ScoreModule } from './score/score.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import entities from './entities';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { QuizzModule } from './quizz/quizz.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    QuizzModule
+    QuizzModule,
+    ScoreModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
