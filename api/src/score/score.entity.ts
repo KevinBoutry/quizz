@@ -25,11 +25,8 @@ export class Score {
   @Column()
   time: number;
 
-  @Column('boolean', { default: false })
-  upvote = false;
-
-  @Column('boolean', { default: false })
-  downvote = false;
+  @Column({ default: null })
+  stars: number;
 
   @CreateDateColumn()
   createdAt: Date;

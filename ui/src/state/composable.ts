@@ -3,6 +3,7 @@ import { ref } from 'vue';
 const CreateAccountPanelStatus = ref(false);
 const LoginPanelStatus = ref(false);
 const isLogged = ref(false);
+const endGamePanelStatus = ref(false);
 
 const PreviewQuizz = ref({
   name: '',
@@ -19,6 +20,7 @@ export function composable() {
     CreateAccountPanelStatus,
     LoginPanelStatus,
     isLogged,
+    endGamePanelStatus,
     PreviewQuizz,
   };
 }

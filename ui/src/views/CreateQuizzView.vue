@@ -32,7 +32,7 @@
         <FileUpload
           mode="basic"
           accept="image/*"
-          :maxFileSize="10000000"
+          :maxFileSize="1000000"
           @select="imagePreview"
         />
       </div>

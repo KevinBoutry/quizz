@@ -7,7 +7,7 @@
       <InputText
         class="text-input"
         placeholder="Type your answers here"
-        :disabled="!gameStarted || gameEnded"
+        :disabled="!gameStarted || endGamePanelStatus"
         v-model="input"
       />
       <div class="quizz-timer">
@@ -49,11 +49,14 @@
     </div>
   </div>
   <GameEndPanel
-    v-if="gameEnded"
+    v-if="endGamePanelStatus && result"
     :score="currentScore"
     :maxScore="quizz.maxScore"
     :time="timePlayed"
     :win="win"
+    :quizz="quizz.id"
+    :user="userProfile.userid"
+    :id="result.id"
   />
 </template>
 
@@ -69,11 +72,15 @@ import { onMounted, ref, watch } from 'vue';
 
 import { useRoute } from 'vue-router';
 import { user } from '@/state/user';
+import { composable } from '@/state/composable';
 
 const route = useRoute();
 const { userProfile } = user();
+const { endGamePanelStatus } = composable();
 
 const quizz = ref();
+const result = ref();
+const pastScore = ref();
 
 const currentScore = ref(0);
 const timePlayed = ref(0);
@@ -82,19 +89,19 @@ const minutes = ref();
 const seconds = ref();
 
 const gameStarted = ref(false);
-const gameEnded = ref(false);
 const win = ref(false);
 const input = ref();
 
 const foundItems = ref([]);
 const itemList = ref([]);
 let fs: any;
+let intervalID: any;
 
 const quizzService: QuizzService = new QuizzService();
 
 function startGame() {
   gameStarted.value = true;
-  const intervalID = setInterval(() => {
+  intervalID = setInterval(() => {
     if (currentScore.value === quizz.value.maxScore) {
       win.value = true;
       endGame();
@@ -116,9 +123,8 @@ function startGame() {
 }
 
 async function endGame() {
-  gameEnded.value = true;
-  minutes.value = 0;
-  seconds.value = 0;
+  endGamePanelStatus.value = true;
+  clearInterval(intervalID);
   const data = {
     score: currentScore.value,
     maxScore: quizz.value.maxScore,
@@ -126,14 +132,14 @@ async function endGame() {
     quizz: quizz.value.id,
     user: userProfile.value.userid,
   };
-  console.log(data);
-  await quizzService.publishScore(data);
+  result.value = await quizzService.publishScore(data);
+  console.log('resutlt ', result.value);
 }
 
 watch(
   input,
   debounce(() => {
-    const found = fs.get(input.value, undefined, 0.8);
+    const found = fs.get(input.value.trim(), undefined, 0.8);
     if (found) {
       quizz.value.categories.forEach((cat, index) => {
         const foundCat = cat.items.find(
@@ -163,6 +169,10 @@ onMounted(async () => {
       ? Math.floor(quizz.value.timer / 60)
       : '00';
   seconds.value = quizz.value.timer % 60;
+  pastScore.value = await quizzService.alreadyPlayed({
+    quizz: quizz.value.id,
+    user: userProfile.value.userid,
+  });
 });
 </script>
 

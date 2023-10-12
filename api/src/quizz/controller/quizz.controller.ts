@@ -40,7 +40,6 @@ export class QuizzController {
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
   async create(@UploadedFiles() image, @Body('data') data) {
-    console.log(data);
     return await this.QuizzService.create(image, JSON.parse(data));
   }
 }

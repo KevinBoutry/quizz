@@ -33,6 +33,20 @@ export class QuizzService {
   };
 
   public publishScore = async (data) => {
-    await this.http.instance.post('score/update', data);
+    return await this.http.instance.post('score/publish', data);
+  };
+
+  public updateScore = async (data) => {
+    return await this.http.instance.put('score/update', data);
+  };
+
+  public updateStars = async (data) => {
+    return await this.http.instance.put('score/stars', data);
+  };
+
+  public alreadyPlayed = async (data) => {
+    return await this.http.instance.get(
+      `score/played/${data.quizz}/${data.user}`
+    );
   };
 }
