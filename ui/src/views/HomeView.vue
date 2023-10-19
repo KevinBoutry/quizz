@@ -7,16 +7,18 @@
     </p>
   </div>
   <LastAddedQuizz />
+  <TrendingQuizz />
 </template>
 
 <script lang="ts" setup>
 import LastAddedQuizz from '@/components/LastAddedQuizz.vue';
+import TrendingQuizz from '@/components/TrendingQuizz.vue';
 </script>
 
 <style lang="scss">
 .presentation {
   position: relative;
-  height: 30vh;
+  height: 20vh;
   width: 100vw;
   background-color: #e22c2c;
   color: white;

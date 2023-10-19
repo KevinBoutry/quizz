@@ -32,6 +32,14 @@ export class QuizzService {
     return await this.http.instance.get('/quizz/recent');
   };
 
+  public getTrending = async () => {
+    return await this.http.instance.get('/quizz/trending');
+  };
+
+  public findByName = async (name) => {
+    return await this.http.instance.get(`quizz/search/${name}`);
+  };
+
   public publishScore = async (data) => {
     return await this.http.instance.post('score/publish', data);
   };

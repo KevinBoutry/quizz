@@ -11,7 +11,7 @@ export class ScoreController {
   }
 
   @Put('update')
-  async updateStars(@Body() data) {
+  async updateScore(@Body() data) {
     return await this.ScoreService.updateScore(data);
   }
 

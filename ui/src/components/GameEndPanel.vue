@@ -43,7 +43,6 @@ function closePanel() {
 }
 
 async function showStars() {
-  console.log(stars.value);
   await quizzService.updateStars({
     user: props.user,
     quizz: props.quizz,

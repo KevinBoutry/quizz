@@ -21,6 +21,13 @@
           @click="goToQuizz(quizz.id)"
         >
           {{ quizz.name }}
+          <Rating
+            class="quizz-rating"
+            v-if="quizz.rating"
+            v-model="quizz.rating"
+            readonly
+            :cancel="false"
+          />
         </div>
       </div>
     </div>
@@ -29,6 +36,7 @@
 
 <script lang="ts" setup>
 import Dropdown from 'primevue/dropdown';
+import Rating from 'primevue/rating';
 import { theme } from '@/state/theme';
 import router from '@/router/index.ts';
 
@@ -97,7 +105,20 @@ function goToQuizz(id) {
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+
+      .quizz-rating {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   }
+}
+</style>
+
+<style lang="scss">
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+  color: gold;
 }
 </style>

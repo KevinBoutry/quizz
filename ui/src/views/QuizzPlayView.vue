@@ -125,15 +125,37 @@ function startGame() {
 async function endGame() {
   endGamePanelStatus.value = true;
   clearInterval(intervalID);
-  const data = {
-    score: currentScore.value,
-    maxScore: quizz.value.maxScore,
-    time: timePlayed.value,
-    quizz: quizz.value.id,
-    user: userProfile.value.userid,
-  };
-  result.value = await quizzService.publishScore(data);
-  console.log('resutlt ', result.value);
+  if (pastScore.value) {
+    console.log('pastScore OK');
+    if (
+      pastScore.value.score < currentScore.value ||
+      (pastScore.value.score === pastScore.value.maxScore &&
+        timePlayed.value < pastScore.value.time)
+    ) {
+      console.log('score update');
+      await quizzService.updateScore({
+        id: pastScore.value.id,
+        score: currentScore.value,
+        time: timePlayed.value,
+      });
+    }
+    result.value = {
+      score: currentScore.value,
+      maxScore: quizz.value.maxScore,
+      time: timePlayed.value,
+      quizz: quizz.value.id,
+      user: userProfile.value.userid,
+    };
+  } else {
+    console.log('score creation');
+    result.value = await quizzService.publishScore({
+      score: currentScore.value,
+      maxScore: quizz.value.maxScore,
+      time: timePlayed.value,
+      quizz: quizz.value.id,
+      user: userProfile.value.userid,
+    });
+  }
 }
 
 watch(
@@ -173,6 +195,7 @@ onMounted(async () => {
     quizz: quizz.value.id,
     user: userProfile.value.userid,
   });
+  console.log('onMoiunted ', pastScore.value);
 });
 </script>
 

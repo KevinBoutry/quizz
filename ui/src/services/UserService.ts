@@ -1,6 +1,7 @@
 import { HttpClient } from './HttpClient';
 import { composable } from '@/state/composable';
 import { ref } from 'vue';
+import router from '@/router/index.ts';
 import { user } from '@/state/user';
 
 export class UserService {
@@ -104,6 +105,10 @@ export class UserService {
       .then((res) => {
         success.value = true;
         CreateAccountPanelStatus.value = false;
+        this.handleLogin({
+          username: userCredentials.username,
+          password: userCredentials.password,
+        });
       })
       .catch((e) => {
         error.value = e.message;

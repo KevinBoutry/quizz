@@ -40,6 +40,7 @@
       <div v-if="isLogged" class="button" @click="logout">LOGOUT</div>
     </div>
   </div>
+  <SearchPanel :searchText="search" />
   <CreateAccount v-if="CreateAccountPanelStatus" />
   <LoginPanel v-if="LoginPanelStatus" />
 </template>
@@ -57,6 +58,7 @@ import { UserService } from '@/services/UserService';
 
 import { composable } from '@/state/composable';
 import { user } from '@/state/user';
+import SearchPanel from './SearchPanel.vue';
 
 const { CreateAccountPanelStatus, LoginPanelStatus, isLogged } = composable();
 

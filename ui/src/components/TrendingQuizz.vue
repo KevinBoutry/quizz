@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Most Recent</h1>
+    <h1 class="title">Most Played</h1>
     <Carousel
       :value="carouselItems"
       :numVisible="3"
@@ -49,18 +49,18 @@ function goToQuizz(id) {
 }
 
 onMounted(async () => {
-  const quizzes = await quizzService.getByRecent();
+  const quizzes = await quizzService.getTrending();
   quizzes.forEach((quizz, index) => {
     carouselItems.value.push({ ...quizz, index });
   });
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .container {
   height: 35vh;
   width: 100vw;
-  background-color: #424b54;
+  background-color: #ebcfb2;
   overflow-y: hidden;
 
   .title {
@@ -90,12 +90,5 @@ onMounted(async () => {
   h1 {
     font-size: 2rem;
   }
-}
-</style>
-
-<style lang="scss">
-.p-carousel-item {
-  display: flex;
-  justify-content: center;
 }
 </style>

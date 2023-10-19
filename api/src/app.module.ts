@@ -21,6 +21,7 @@ import entities from './entities';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
+        logging: ['query', 'error'],
         host: configService.get('DB_HOST'),
         port: +configService.get<number>('DB_PORT'),
         username: configService.get('DB_USERNAME'),

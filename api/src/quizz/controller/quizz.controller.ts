@@ -11,6 +11,7 @@ import { QuizzService } from '../service/quizz.service';
 import { CreateQuizzDto } from '../dto/quizz.dto';
 import { Quizz } from '../quizz.entity';
 import { Item } from '../item.entity';
+import { Score } from '../../score/score.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('quizz')
@@ -25,6 +26,16 @@ export class QuizzController {
   @Get('recent')
   async getRecent() {
     return await this.QuizzService.getRecent();
+  }
+
+  @Get('trending')
+  async getTrending() {
+    return await this.QuizzService.getTrending();
+  }
+
+  @Get('search/:name')
+  async getByName(@Param('name') name: string) {
+    return await this.QuizzService.getByName(name);
   }
 
   @Get(':id')

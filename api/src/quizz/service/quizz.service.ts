@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { Quizz } from '../quizz.entity';
 import { Item } from '../item.entity';
+import { Score } from '../../score/score.entity';
 import { CreateQuizzDto } from '../dto/quizz.dto';
 import { CreateItemDto } from '../dto/item.dto';
 import * as fs from 'fs-extra';
@@ -25,15 +26,34 @@ export class QuizzService {
     }
   }
 
+  async getRating(id) {
+    const rating = await this.QuizzRepository.createQueryBuilder()
+      .select('quizz.id')
+      .select('AVG(s.stars)', 'average')
+      .from(Quizz, 'quizz')
+      .innerJoin('score', 's', 's.quizzId = quizz.id')
+      .where(`quizz.id = ${id}`)
+      .groupBy('quizz.id')
+      .execute();
+    if (rating && rating.length > 0) {
+      return Math.round(rating[0].average);
+    } else return null;
+  }
+
   async getByTheme(theme) {
     const quizzes = await this.QuizzRepository.find({
       where: {
         theme,
       },
     });
-    const result = quizzes.map((current) => {
-      return { ...current, thumbnail: this.getThumbnail(current.id) };
-    });
+    const result = [];
+    for (const quizz of quizzes) {
+      result.push({
+        ...quizz,
+        thumbnail: this.getThumbnail(quizz.id),
+        rating: await this.getRating(quizz.id),
+      });
+    }
     return result;
   }
 
@@ -43,9 +63,31 @@ export class QuizzService {
         createdAt: 'DESC',
       },
     });
-    const result = quizzes.map((current) => {
-      return { ...current, thumbnail: this.getThumbnail(current.id) };
+    const result = [];
+    for (const quizz of quizzes) {
+      result.push({
+        ...quizz,
+        thumbnail: this.getThumbnail(quizz.id),
+        rating: await this.getRating(quizz.id),
+      });
+    }
+    return result;
+  }
+
+  async getTrending() {
+    const quizzes = await this.QuizzRepository.find({
+      order: {
+        timeplayed: 'DESC',
+      },
     });
+    const result = [];
+    for (const quizz of quizzes) {
+      result.push({
+        ...quizz,
+        thumbnail: this.getThumbnail(quizz.id),
+        rating: await this.getRating(quizz.id),
+      });
+    }
     return result;
   }
 
@@ -86,6 +128,15 @@ export class QuizzService {
       quizz.categories[idx].items.push(item.name);
     });
     return quizz;
+  }
+
+  async getByName(name) {
+    return await this.QuizzRepository.createQueryBuilder()
+      .select()
+      .where('name LIKE :name', {
+        name: `%${name}%`,
+      })
+      .getMany();
   }
 
   async create(image, createQuizzDto) {

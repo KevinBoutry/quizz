@@ -13,6 +13,14 @@ export class ScoreService {
   ) {}
 
   async create(data) {
+    console.log('data ', data);
+    this.ScoreRepository.createQueryBuilder()
+      .update('quizz')
+      .set({
+        timeplayed: () => 'timeplayed + 1',
+      })
+      .where('id = :id', { id: data.quizz })
+      .execute();
     return await this.ScoreRepository.save(data);
   }
 
@@ -37,7 +45,7 @@ export class ScoreService {
 
   async alreadyPlayed(data) {
     console.log('data service', data);
-    return await this.ScoreRepository.find({
+    return await this.ScoreRepository.findOne({
       relations: ['quizz', 'user'],
       where: {
         quizz: {
