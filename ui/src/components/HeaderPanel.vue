@@ -15,8 +15,8 @@
       </div>
     </div>
     <span class="p-input-icon-left">
-      <i class="pi pi-search"></i>
-      <InputText v-model="search" placeholder="Search" class="p-inputtext-sm" />
+      <i class="pi pi-search" />
+      <InputText v-model="search" placeholder="Search" />
     </span>
     <div class="right-homepanel">
       <div
@@ -40,7 +40,7 @@
       <div v-if="isLogged" class="button" @click="logout">LOGOUT</div>
     </div>
   </div>
-  <SearchPanel :searchText="search" />
+  <SearchPanel :searchText="search" v-if="search" />
   <CreateAccount v-if="CreateAccountPanelStatus" />
   <LoginPanel v-if="LoginPanelStatus" />
 </template>
@@ -62,7 +62,7 @@ import SearchPanel from './SearchPanel.vue';
 
 const { CreateAccountPanelStatus, LoginPanelStatus, isLogged } = composable();
 
-const search = ref('');
+const search = ref();
 
 const router = useRouter();
 const { userProfile } = user();

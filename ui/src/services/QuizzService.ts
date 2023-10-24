@@ -20,6 +20,10 @@ export class QuizzService {
     return quizz;
   };
 
+  public getAll = async (filter) => {
+    return await this.http.instance.get('/quizz', { params: filter });
+  };
+
   public getByTheme = async (theme) => {
     return await this.http.instance.get(`/quizz/themes/${theme}`);
   };
@@ -34,10 +38,6 @@ export class QuizzService {
 
   public getTrending = async () => {
     return await this.http.instance.get('/quizz/trending');
-  };
-
-  public findByName = async (name) => {
-    return await this.http.instance.get(`quizz/search/${name}`);
   };
 
   public publishScore = async (data) => {

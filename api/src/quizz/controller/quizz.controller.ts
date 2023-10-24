@@ -6,6 +6,9 @@ import {
   Param,
   UseInterceptors,
   UploadedFiles,
+  Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { QuizzService } from '../service/quizz.service';
 import { CreateQuizzDto } from '../dto/quizz.dto';
@@ -13,14 +16,16 @@ import { Quizz } from '../quizz.entity';
 import { Item } from '../item.entity';
 import { Score } from '../../score/score.entity';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { GenericFilter } from 'src/pagination/generic-filter';
 
 @Controller('quizz')
 export class QuizzController {
   constructor(private QuizzService: QuizzService) {}
 
   @Get()
-  async getAll(): Promise<Quizz[]> {
-    return await this.QuizzService.getAll();
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getAll(@Query() filter: GenericFilter): Promise<Quizz[]> {
+    return await this.QuizzService.getAll(filter);
   }
 
   @Get('recent')
@@ -31,11 +36,6 @@ export class QuizzController {
   @Get('trending')
   async getTrending() {
     return await this.QuizzService.getTrending();
-  }
-
-  @Get('search/:name')
-  async getByName(@Param('name') name: string) {
-    return await this.QuizzService.getByName(name);
   }
 
   @Get(':id')

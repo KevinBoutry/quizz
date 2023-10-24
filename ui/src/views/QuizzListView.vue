@@ -1,7 +1,6 @@
 <template>
   <div class="quizz-list-container">
     <div class="select-theme">
-      <label for="theme">Theme :</label>
       <Dropdown
         v-model="selectedTheme"
         :options="Theme"
@@ -42,7 +41,7 @@ import router from '@/router/index.ts';
 
 import { QuizzService } from '@/services/QuizzService.ts';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 const { Theme } = theme();
 
 const quizzService: QuizzService = new QuizzService();
@@ -51,8 +50,9 @@ const selectedTheme = ref();
 const quizzList = ref();
 
 async function loadQuizzList() {
-  quizzList.value = await quizzService.getByTheme(selectedTheme.value.name);
-  console.log(quizzList.value);
+  quizzList.value = await quizzService.getAll({
+    theme: selectedTheme.value.name,
+  });
 }
 
 function imageDataUrl(data: any) {
@@ -68,6 +68,11 @@ function imageDataUrl(data: any) {
 function goToQuizz(id) {
   router.push(`/quizz/${id}`);
 }
+
+onMounted(async () => {
+  quizzList.value = await quizzService.getAll({ pageSize: 9 });
+  console.log(quizzList.value);
+});
 </script>
 
 <style lang="scss" scoped>

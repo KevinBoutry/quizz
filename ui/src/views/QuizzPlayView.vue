@@ -158,6 +158,24 @@ async function endGame() {
   }
 }
 
+async function getQuizz() {
+  quizz.value = await quizzService.getById(route.params.id);
+  quizz.value.categories.forEach((cat) => {
+    foundItems.value.push({ category: cat.catName, items: [] });
+    itemList.value = itemList.value.concat(cat.items);
+  });
+  fs = FuzzySet(itemList.value);
+  minutes.value =
+    Math.floor(quizz.value.timer / 60) > 0
+      ? Math.floor(quizz.value.timer / 60)
+      : '00';
+  seconds.value = quizz.value.timer % 60;
+  pastScore.value = await quizzService.alreadyPlayed({
+    quizz: quizz.value.id,
+    user: userProfile.value.userid,
+  });
+}
+
 watch(
   input,
   debounce(() => {
@@ -179,23 +197,12 @@ watch(
   }, 300)
 );
 
+watch(route, async () => {
+  await getQuizz();
+});
+
 onMounted(async () => {
-  quizz.value = await quizzService.getById(route.params.id);
-  quizz.value.categories.forEach((cat) => {
-    foundItems.value.push({ category: cat.catName, items: [] });
-    itemList.value = itemList.value.concat(cat.items);
-  });
-  fs = FuzzySet(itemList.value);
-  minutes.value =
-    Math.floor(quizz.value.timer / 60) > 0
-      ? Math.floor(quizz.value.timer / 60)
-      : '00';
-  seconds.value = quizz.value.timer % 60;
-  pastScore.value = await quizzService.alreadyPlayed({
-    quizz: quizz.value.id,
-    user: userProfile.value.userid,
-  });
-  console.log('onMoiunted ', pastScore.value);
+  await getQuizz();
 });
 </script>
 

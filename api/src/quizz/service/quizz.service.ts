@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult, UpdateResult } from 'typeorm';
+import { Repository, DeleteResult, UpdateResult, Like, Raw } from 'typeorm';
 import { Quizz } from '../quizz.entity';
 import { Item } from '../item.entity';
 import { Score } from '../../score/score.entity';
 import { CreateQuizzDto } from '../dto/quizz.dto';
 import { CreateItemDto } from '../dto/item.dto';
 import * as fs from 'fs-extra';
+import { GenericFilter } from 'src/pagination/generic-filter';
 
 @Injectable()
 export class QuizzService {
@@ -15,15 +16,42 @@ export class QuizzService {
     @InjectRepository(Item) private ItemRepository: Repository<Item>,
   ) {}
 
-  async getAll(): Promise<Quizz[]> {
-    return await this.QuizzRepository.find();
-  }
-
   getThumbnail(id) {
     const path = './upload/thumbnails';
     if (fs.existsSync(path)) {
       return fs.readFileSync(`${path}/${id}.png`);
     }
+  }
+
+  async getAll(filter: GenericFilter): Promise<Quizz[]> {
+    const whereClause = { name: undefined, theme: undefined };
+    if (filter.name) {
+      whereClause.name = Raw(
+        (alias) => `LOWER(${alias}) LIKE '%${filter.name.toLowerCase()}%'`,
+      );
+    }
+    if (filter.theme) {
+      whereClause.theme = filter.theme;
+    }
+    const quizzes = await this.QuizzRepository.find({
+      where: whereClause,
+      take: filter.pageSize,
+      skip: (filter.page - 1) * filter.pageSize,
+      order: {
+        timeplayed: 'DESC',
+      },
+    });
+
+    const result = [];
+
+    for (const quizz of quizzes) {
+      result.push({
+        ...quizz,
+        thumbnail: this.getThumbnail(quizz.id),
+        rating: await this.getRating(quizz.id),
+      });
+    }
+    return result;
   }
 
   async getRating(id) {
@@ -128,15 +156,6 @@ export class QuizzService {
       quizz.categories[idx].items.push(item.name);
     });
     return quizz;
-  }
-
-  async getByName(name) {
-    return await this.QuizzRepository.createQueryBuilder()
-      .select()
-      .where('name LIKE :name', {
-        name: `%${name}%`,
-      })
-      .getMany();
   }
 
   async create(image, createQuizzDto) {
