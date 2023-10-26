@@ -9,10 +9,14 @@ const PreviewQuizz = ref({
   name: '',
   description: '',
   theme: '',
+  type: '',
   time: 0,
   thumbnail: '',
   categories: [],
-  textColor: '',
+  textColor: 'FFFFFF',
+  backgroundColor: '000000',
+  showTitle: true,
+  public: true,
 });
 
 export function composable() {

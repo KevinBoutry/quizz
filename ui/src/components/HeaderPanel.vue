@@ -3,8 +3,7 @@
     <div class="left-homepanel">
       <div class="home-button">
         <RouterLink to="/">
-          <!-- TODO : Logo du site en bouton Home -->
-          HOME
+          <i class="pi pi-home" />
         </RouterLink>
       </div>
       <div>

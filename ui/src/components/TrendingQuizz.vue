@@ -16,7 +16,14 @@
           )}' ); color : #${slotProps.data.textColor}`"
           @click="goToQuizz(slotProps.data.id)"
         >
-          <h1>{{ slotProps.data.name }}</h1>
+          {{ slotProps.data.name }}
+          <Rating
+            class="quizz-rating"
+            v-if="slotProps.data.rating"
+            v-model="slotProps.data.rating"
+            readonly
+            :cancel="false"
+          />
         </div>
       </template>
     </Carousel>
@@ -25,6 +32,7 @@
 
 <script lang="ts" setup>
 import Carousel from 'primevue/carousel';
+import Rating from 'primevue/rating';
 
 import { onMounted, ref } from 'vue';
 import { QuizzService } from '@/services/QuizzService';
@@ -66,29 +74,30 @@ onMounted(async () => {
   .title {
     text-align: center;
   }
-}
-
-.quizz-box {
-  justify-self: center;
-  width: 20vw;
-  height: 25vh;
-  color: black;
-  background-color: white;
-  border-radius: 5px;
-  border: black solid 2px;
-  text-align: center;
-  margin: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-
-  h1 {
+  .quizz-box {
+    width: 20vw;
+    height: 25vh;
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+    border: black solid 2px;
+    text-align: center;
+    margin: 10px;
     font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    .quizz-rating {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }
 </style>

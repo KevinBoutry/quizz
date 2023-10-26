@@ -11,11 +11,20 @@ export class CreateQuizzDto {
   @IsNotEmpty()
   theme: string;
 
+  @IsNotEmpty()
+  type: string;
+
   id: number;
 
   description: string;
 
   textColor: string;
+
+  backgroundColor: string;
+
+  showTitle: boolean;
+
+  public: boolean;
 
   createdAt: Date;
 

@@ -69,6 +69,7 @@ async function saveQuizz() {
     name: PreviewQuizz.value.name,
     timer: PreviewQuizz.value.time,
     theme: PreviewQuizz.value.theme.name,
+    type: PreviewQuizz.value.type.name,
     description: PreviewQuizz.value.description,
     thumbnail: PreviewQuizz.value.thumbnail,
     items: itemList.value,

@@ -20,6 +20,16 @@
         />
       </div>
       <div class="inputcontainer">
+        <label for="quizztype">Quizz type :</label>
+        <Dropdown
+          v-model="PreviewQuizz.type"
+          :options="QuizzType"
+          optionLabel="name"
+          placeholder="Select a Type"
+          class="w-full md:w-14rem"
+        />
+      </div>
+      <div class="inputcontainer">
         <label for="timer">Time :</label>
         <InputText
           type="text"
@@ -36,19 +46,37 @@
           @select="imagePreview"
         />
       </div>
-      <CategoryPanel />
-    </div>
-    <div
-      class="preview"
-      :style="`color: #${PreviewQuizz.textColor}; background-image : url('${thumbnail}');`"
-    >
-      <div class="preview-text">
-        {{ PreviewQuizz.name }}
+      <div class="inputcontainer">
+        <label for="public">Public :</label>
+        <Checkbox v-model="PreviewQuizz.public" :binary="true" />
       </div>
+      <CategoryPanel v-if="PreviewQuizz.type.name === 'List with categories'" />
+      <RankingPanel v-if="PreviewQuizz.type.name === 'Ranking'" />
     </div>
-    <div class="text-color">
-      <span class="text-color-text">Text color :</span>
-      <ColorPicker v-model="PreviewQuizz.textColor" />
+    <div class="preview">
+      <h1 class="preview-title">Thumbnail Preview</h1>
+      <div
+        class="thumbnail-preview"
+        :style="`color: #${PreviewQuizz.textColor}; background-color: #${PreviewQuizz.backgroundColor}; background-image : url('${thumbnail}');`"
+      >
+        <div class="preview-text" v-if="PreviewQuizz.showTitle">
+          {{ PreviewQuizz.name }}
+        </div>
+      </div>
+      <div class="preview-input-container">
+        <div class="preview-input">
+          <span class="text-color-text">Text color :</span>
+          <ColorPicker v-model="PreviewQuizz.textColor" />
+        </div>
+        <div>
+          <span class="text-color-text">Background color :</span>
+          <ColorPicker v-model="PreviewQuizz.backgroundColor" />
+        </div>
+        <div>
+          <span class="text-color-text">Show Title :</span>
+          <Checkbox v-model="PreviewQuizz.showTitle" :binary="true" />
+        </div>
+      </div>
     </div>
     <Button label="PREVIEW" class="preview-button" @click="createPreview" />
   </div>
@@ -61,18 +89,24 @@ import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 import ColorPicker from 'primevue/colorpicker';
+import Checkbox from 'primevue/checkbox';
 
 import CategoryPanel from '@/components/CategoryPanel.vue';
+import RankingPanel from '@/components/RankingPanel.vue';
 
 import { composable } from '@/state/composable';
 import { theme } from '@/state/theme';
+import { quizzType } from '@/state/quizzType';
 import router from '@/router/index.ts';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const { PreviewQuizz } = composable();
 const { Theme } = theme();
+const { QuizzType } = quizzType();
 
 const thumbnail = ref();
+
+const type = ref({ name: '' });
 
 const imagePreview = async (event: any) => {
   thumbnail.value = event.files[0].objectURL;
@@ -84,6 +118,10 @@ function createPreview() {
   console.log(PreviewQuizz.value);
   router.push('/preview');
 }
+
+watch(type, () => {
+  console.log(type.value);
+});
 </script>
 
 <style lang="scss">
@@ -125,31 +163,35 @@ function createPreview() {
     position: absolute;
     right: 150px;
     top: 15px;
-    width: 400px;
-    height: 250px;
-    background-color: black;
-    text-align: center;
-    font-size: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
 
-    .preview-text {
-      text-shadow: 2px 2px 2px black;
+    .preview-title {
+      text-align: center;
     }
-  }
-  .text-color {
-    position: absolute;
-    top: 280px;
-    right: 300px;
-    font-size: 1rem;
 
-    .text-color-text {
-      margin-right: 5px;
+    .thumbnail-preview {
+      width: 400px;
+      height: 250px;
+      background-color: black;
+      text-align: center;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      .preview-text {
+        text-shadow: 2px 2px 2px black;
+      }
+    }
+    .preview-input-container {
+      text-align: center;
+
+      .text-color-text {
+        margin: 5px;
+      }
     }
   }
 

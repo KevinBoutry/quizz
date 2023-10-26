@@ -33,7 +33,19 @@ export class Quizz {
   theme: string;
 
   @Column()
+  type: string;
+
+  @Column()
   textColor: string;
+
+  @Column()
+  backgroundColor: string;
+
+  @Column()
+  showTitle: boolean;
+
+  @Column()
+  public: boolean;
 
   @Column({ default: 0 })
   timeplayed: number;
