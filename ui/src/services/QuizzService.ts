@@ -9,7 +9,9 @@ export class QuizzService {
 
   public createQuizz = async (data) => {
     const formData = new FormData();
-    formData.append('image', data.thumbnail, 'thumbnail.png');
+    if (data.thumbnail) {
+      formData.append('image', data.thumbnail, 'thumbnail.png');
+    }
     const dataCopy = { ...data };
     delete dataCopy.thumbnail;
     formData.append('data', JSON.stringify(dataCopy));

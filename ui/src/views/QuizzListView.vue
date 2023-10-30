@@ -12,22 +12,7 @@
     </div>
     <div class="quizz-list">
       <div v-for="quizz in quizzList" :key="quizz.id">
-        <div
-          class="quizz-box"
-          :style="`background-image : url('${imageDataUrl(
-            quizz.thumbnail.data
-          )}' ); color : #${quizz.textColor}`"
-          @click="goToQuizz(quizz.id)"
-        >
-          {{ quizz.name }}
-          <Rating
-            class="quizz-rating"
-            v-if="quizz.rating"
-            v-model="quizz.rating"
-            readonly
-            :cancel="false"
-          />
-        </div>
+        <QuizzCard :quizz="quizz" />
       </div>
     </div>
   </div>
@@ -35,9 +20,8 @@
 
 <script lang="ts" setup>
 import Dropdown from 'primevue/dropdown';
-import Rating from 'primevue/rating';
+import QuizzCard from '@/components/QuizzCard.vue';
 import { theme } from '@/state/theme';
-import router from '@/router/index.ts';
 
 import { QuizzService } from '@/services/QuizzService.ts';
 
@@ -53,20 +37,6 @@ async function loadQuizzList() {
   quizzList.value = await quizzService.getAll({
     theme: selectedTheme.value.name,
   });
-}
-
-function imageDataUrl(data: any) {
-  // Create a Blob from the buffer data
-  const blob = new Blob([new Uint8Array(data)], {
-    type: 'image/jpeg', // Replace with the appropriate image type (e.g., 'image/png', 'image/jpeg')
-  });
-
-  // Create a data URL from the Blob
-  return URL.createObjectURL(blob);
-}
-
-function goToQuizz(id) {
-  router.push(`/quizz/${id}`);
 }
 
 onMounted(async () => {

@@ -196,7 +196,7 @@ watch(type, () => {
   }
 
   .preview-button {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translateX(-50%);
     bottom: 30px;

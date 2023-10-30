@@ -65,6 +65,7 @@ function createItemList() {
 
 async function saveQuizz() {
   createItemList();
+  console.log(PreviewQuizz.value);
   const res = await quizzService.createQuizz({
     name: PreviewQuizz.value.name,
     timer: PreviewQuizz.value.time,
@@ -75,6 +76,9 @@ async function saveQuizz() {
     items: itemList.value,
     user: userProfile.value.userid,
     textColor: PreviewQuizz.value.textColor,
+    backgroundColor: PreviewQuizz.value.backgroundColor,
+    showTitle: PreviewQuizz.value.showTitle,
+    public: PreviewQuizz.value.public,
   });
 }
 </script>

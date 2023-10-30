@@ -17,10 +17,11 @@ export class QuizzService {
   ) {}
 
   getThumbnail(id) {
-    const path = './upload/thumbnails';
+    const path = `./upload/thumbnails/${id}.png`;
     if (fs.existsSync(path)) {
-      return fs.readFileSync(`${path}/${id}.png`);
+      return fs.readFileSync(path);
     }
+    return null;
   }
 
   async getAll(filter: GenericFilter): Promise<Quizz[]> {

@@ -11,9 +11,13 @@
       <template #item="slotProps">
         <div
           class="quizz-box"
-          :style="`background-image : url('${imageDataUrl(
-            slotProps.data.thumbnail.data
-          )}' ); color : #${slotProps.data.textColor}`"
+          :style="[
+            slotProps.data.thumbnail && slotProps.data.thumbnail.data
+              ? `background-image : url('${imageDataUrl(
+                  slotProps.data.thumbnail.data
+                )}' ); color : #${slotProps.data.textColor}`
+              : `background-color : #${slotProps.data.backgroundColor}; color : #${slotProps.data.textColor}`,
+          ]"
           @click="goToQuizz(slotProps.data.id)"
         >
           {{ slotProps.data.name }}
