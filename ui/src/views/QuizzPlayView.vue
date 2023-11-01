@@ -24,7 +24,30 @@
         :disabled="!gameStarted"
       />
     </div>
-    <div class="quizz-container">
+    <div class="quizz-container-ranking" v-if="quizz.type === 'Ranking'">
+      <div v-for="(category, index) in quizz.categories" :key="category">
+        <div class="category-container">
+          <div class="category-title">
+            {{ category.catName }}
+          </div>
+          <div class="answer" v-for="item in category.items" :key="item">
+            <span
+              class="answer-text"
+              v-if="
+                item ===
+                foundItems[index].items.find((current) => current === item)
+              "
+              >{{ item }}</span
+            >
+            <Skeleton v-else />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="quizz-container-categories"
+      v-if="quizz.type === 'List with categories'"
+    >
       <div
         class="category-container"
         v-for="(category, index) in quizz.categories"
@@ -174,6 +197,7 @@ async function getQuizz() {
     quizz: quizz.value.id,
     user: userProfile.value.userid,
   });
+  console.log(quizz.value);
 }
 
 watch(
@@ -254,7 +278,7 @@ onMounted(async () => {
       margin-right: 10px;
     }
   }
-  .quizz-container {
+  .quizz-container-categories {
     display: flex;
     justify-content: space-around;
     padding-top: 50px;
@@ -298,6 +322,42 @@ onMounted(async () => {
       .answer {
         color: black;
         padding: 5px;
+      }
+    }
+  }
+  .quizz-container-ranking {
+    margin: 10px;
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    flex-direction: column;
+
+    .category-container {
+      display: flex;
+      width: 80vw;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+
+      .category-title {
+        text-align: center;
+        width: 5vw;
+        border-radius: 5px;
+        border: 1px solid black;
+        background-color: #c5baaf;
+        color: black;
+      }
+      .answer {
+        width: 75vw;
+        margin-left: 15px;
+        margin-right: 15px;
+        background-color: white;
+        border-radius: 5px;
+
+        .answer-text {
+          margin-left: 10px;
+          color: black;
+        }
       }
     }
   }

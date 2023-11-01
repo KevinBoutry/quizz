@@ -9,26 +9,7 @@
       v-if="carouselItems"
     >
       <template #item="slotProps">
-        <div
-          class="quizz-box"
-          :style="[
-            slotProps.data.thumbnail && slotProps.data.thumbnail.data
-              ? `background-image : url('${imageDataUrl(
-                  slotProps.data.thumbnail.data
-                )}' ); color : #${slotProps.data.textColor}`
-              : `background-color : #${slotProps.data.backgroundColor}; color : #${slotProps.data.textColor}`,
-          ]"
-          @click="goToQuizz(slotProps.data.id)"
-        >
-          {{ slotProps.data.name }}
-          <Rating
-            class="quizz-rating"
-            v-if="slotProps.data.rating"
-            v-model="slotProps.data.rating"
-            readonly
-            :cancel="false"
-          />
-        </div>
+        <QuizzCard :quizz="slotProps.data" />
       </template>
     </Carousel>
   </div>
@@ -36,29 +17,15 @@
 
 <script lang="ts" setup>
 import Carousel from 'primevue/carousel';
-import Rating from 'primevue/rating';
+
+import QuizzCard from './QuizzCard.vue';
 
 import { onMounted, ref } from 'vue';
 import { QuizzService } from '@/services/QuizzService';
-import router from '@/router/index.ts';
 
 const quizzService: QuizzService = new QuizzService();
 
 const carouselItems = ref([]);
-
-function imageDataUrl(data: any) {
-  // Create a Blob from the buffer data
-  const blob = new Blob([new Uint8Array(data)], {
-    type: 'image/jpeg', // Replace with the appropriate image type (e.g., 'image/png', 'image/jpeg')
-  });
-
-  // Create a data URL from the Blob
-  return URL.createObjectURL(blob);
-}
-
-function goToQuizz(id) {
-  router.push(`/quizz/${id}`);
-}
 
 onMounted(async () => {
   const quizzes = await quizzService.getByRecent();

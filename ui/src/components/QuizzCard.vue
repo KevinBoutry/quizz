@@ -69,6 +69,7 @@ onMounted(() => {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
 
   .quizz-rating {
     position: absolute;
