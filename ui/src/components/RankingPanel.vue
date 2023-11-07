@@ -83,11 +83,11 @@ onMounted(() => {
   background-color: #ebcfb2;
   padding: 10px;
   border-radius: 5px;
+  width: 95vw;
   max-height: 35vh;
   margin: 10px;
   color: black;
   border: 2px solid #c5baaf;
-  max-width: 95vw;
   overflow-y: hidden;
 
   .cat-container {

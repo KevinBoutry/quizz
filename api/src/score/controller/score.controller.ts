@@ -5,6 +5,11 @@ import { ScoreService } from '../service/score.service';
 export class ScoreController {
   constructor(private ScoreService: ScoreService) {}
 
+  @Get('id/:user')
+  async getScoresByUserId(@Param('user') user) {
+    return await this.ScoreService.getScoresByUserId(user);
+  }
+
   @Post('publish')
   async create(@Body() data) {
     return await this.ScoreService.create(data);
@@ -22,7 +27,6 @@ export class ScoreController {
 
   @Get('played/:quizz/:user')
   async alreadyPlayed(@Param('quizz') quizz, @Param('user') user) {
-    console.log('data controller', quizz, user);
     return await this.ScoreService.alreadyPlayed({ quizz, user });
   }
 }

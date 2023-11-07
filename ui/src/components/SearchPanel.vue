@@ -2,7 +2,7 @@
   <div class="result-container">
     <div
       class="result"
-      v-for="result in searchResult"
+      v-for="result in searchResult.data"
       :key="result"
       @click="goToQuizz(result.id)"
     >
@@ -31,16 +31,20 @@ const props = defineProps(['searchText']);
 
 const quizzService: QuizzService = new QuizzService();
 
-const searchResult = ref();
+const searchResult = ref({ data: [] });
 
 function goToQuizz(id) {
+  searchResult.value.data = [];
   router.push({ name: 'quizz', params: { id }, replace: true });
 }
 
 watch(
   props,
   debounce(async () => {
-    searchResult.value = await quizzService.getAll({ name: props.searchText });
+    searchResult.value = await quizzService.getAll({
+      name: props.searchText,
+      pageSize: 6,
+    });
   }, 300),
   { deep: true }
 );

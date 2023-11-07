@@ -24,7 +24,7 @@ export class QuizzController {
 
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
-  async getAll(@Query() filter: GenericFilter): Promise<Quizz[]> {
+  async getAll(@Query() filter: GenericFilter) {
     return await this.QuizzService.getAll(filter);
   }
 

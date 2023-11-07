@@ -24,8 +24,12 @@ export class QuizzService {
     return null;
   }
 
-  async getAll(filter: GenericFilter): Promise<Quizz[]> {
-    const whereClause = { name: undefined, theme: undefined };
+  async getAll(filter: GenericFilter) {
+    const whereClause = {
+      name: undefined,
+      theme: undefined,
+      user: undefined,
+    };
     if (filter.name) {
       whereClause.name = Raw(
         (alias) => `LOWER(${alias}) LIKE '%${filter.name.toLowerCase()}%'`,
@@ -34,7 +38,12 @@ export class QuizzService {
     if (filter.theme) {
       whereClause.theme = filter.theme;
     }
+    if (filter.creatorId) {
+      console.log(filter.creatorId);
+      whereClause.user = { id: filter.creatorId };
+    }
     const quizzes = await this.QuizzRepository.find({
+      relations: ['user'],
       where: whereClause,
       take: filter.pageSize,
       skip: (filter.page - 1) * filter.pageSize,
@@ -43,15 +52,23 @@ export class QuizzService {
       },
     });
 
-    const result = [];
+    const quizzCount = await this.QuizzRepository.count({
+      where: whereClause,
+    });
+
+    const result = {
+      maxPage: Math.ceil(quizzCount / filter.pageSize),
+      data: [],
+    };
 
     for (const quizz of quizzes) {
-      result.push({
+      result.data.push({
         ...quizz,
         thumbnail: this.getThumbnail(quizz.id),
         rating: await this.getRating(quizz.id),
       });
     }
+    console.log(result);
     return result;
   }
 
@@ -91,6 +108,7 @@ export class QuizzService {
       order: {
         createdAt: 'DESC',
       },
+      take: 9,
     });
     const result = [];
     for (const quizz of quizzes) {
@@ -108,6 +126,7 @@ export class QuizzService {
       order: {
         timeplayed: 'DESC',
       },
+      take: 9,
     });
     const result = [];
     for (const quizz of quizzes) {
@@ -132,6 +151,11 @@ export class QuizzService {
             id,
           },
         },
+      });
+    }
+    if (tempQuizz.type === 'Ranking') {
+      tempQuizz.items = tempQuizz.items.sort((a: any, b: any) => {
+        return a.category - b.category;
       });
     }
     const maxScore = tempQuizz.items.length;
@@ -170,13 +194,16 @@ export class QuizzService {
       await this.ItemRepository.save(currentItem);
     });
     const quizz = { ...savedQuizz, thumbnail: null };
-    const path = './upload/thumbnails';
-    const filePath = `${path}/${savedQuizz.id}.png`;
-    await fs.ensureDir(path);
-    await fs.writeFile(filePath, image[0].buffer);
-    if (fs.existsSync(filePath)) {
-      const imageBuffer = fs.readFileSync(filePath);
-      quizz.thumbnail = imageBuffer;
+    if (image.length > 0) {
+      console.log('jarrive dans la partie image', image);
+      const path = './upload/thumbnails';
+      const filePath = `${path}/${savedQuizz.id}.png`;
+      await fs.ensureDir(path);
+      await fs.writeFile(filePath, image[0].buffer);
+      if (fs.existsSync(filePath)) {
+        const imageBuffer = fs.readFileSync(filePath);
+        quizz.thumbnail = imageBuffer;
+      }
     }
     return quizz;
   }

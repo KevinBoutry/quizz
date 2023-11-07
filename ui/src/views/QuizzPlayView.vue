@@ -39,6 +39,9 @@
               "
               >{{ item }}</span
             >
+            <span v-else-if="gameEnded" class="answer-not-found">{{
+              item
+            }}</span>
             <Skeleton v-else />
           </div>
         </div>
@@ -65,6 +68,9 @@
               "
               >{{ item }}</span
             >
+            <span v-else-if="gameEnded" class="answer-not-found">{{
+              item
+            }}</span>
             <Skeleton v-else />
           </div>
         </div>
@@ -112,6 +118,7 @@ const minutes = ref();
 const seconds = ref();
 
 const gameStarted = ref(false);
+const gameEnded = ref(false);
 const win = ref(false);
 const input = ref();
 
@@ -146,6 +153,7 @@ function startGame() {
 }
 
 async function endGame() {
+  gameEnded.value = true;
   endGamePanelStatus.value = true;
   clearInterval(intervalID);
   if (pastScore.value) {
@@ -197,7 +205,6 @@ async function getQuizz() {
     quizz: quizz.value.id,
     user: userProfile.value.userid,
   });
-  console.log(quizz.value);
 }
 
 watch(
@@ -323,6 +330,10 @@ onMounted(async () => {
         color: black;
         padding: 5px;
       }
+
+      .answer-not-found {
+        color: red;
+      }
     }
   }
   .quizz-container-ranking {
@@ -354,6 +365,9 @@ onMounted(async () => {
         background-color: white;
         border-radius: 5px;
 
+        .answer-not-found {
+          color: red;
+        }
         .answer-text {
           margin-left: 10px;
           color: black;

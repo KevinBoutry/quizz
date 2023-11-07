@@ -21,4 +21,8 @@ export class GenericFilter {
   @IsOptional()
   @IsString()
   public name?: string;
+
+  @IsOptional()
+  @IsString()
+  public creatorId?: number;
 }

@@ -112,7 +112,7 @@ function deleteItem(id, selectedItem) {
     max-width: 250px;
     background-color: antiquewhite;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 30px;
     padding-bottom: 10px;
 
     .category-title {

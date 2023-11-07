@@ -44,7 +44,6 @@ export class ScoreService {
   }
 
   async alreadyPlayed(data) {
-    console.log('data service', data);
     return await this.ScoreRepository.findOne({
       relations: ['quizz', 'user'],
       where: {
@@ -54,6 +53,18 @@ export class ScoreService {
         user: {
           id: data.user,
         },
+      },
+    });
+  }
+
+  async getScoresByUserId(user) {
+    return await this.ScoreRepository.find({
+      relations: ['quizz', 'user'],
+      select: {
+        quizz: { name: true },
+      },
+      where: {
+        user,
       },
     });
   }

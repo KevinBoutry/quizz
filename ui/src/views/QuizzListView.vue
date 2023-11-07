@@ -11,15 +11,27 @@
       />
     </div>
     <div class="quizz-list">
-      <div v-for="quizz in quizzList" :key="quizz.id">
+      <div v-for="quizz in quizzList.data" :key="quizz.id">
         <QuizzCard :quizz="quizz" />
       </div>
+    </div>
+    <div class="nav-button">
+      <span class="more-button" v-if="pageNumber > 1" @click="goToPreviousPage"
+        >Previous Page</span
+      >
+      <span
+        class="more-button"
+        @click="goToNextPage"
+        v-if="pageNumber != quizzList.maxPage"
+        >Next Page</span
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Dropdown from 'primevue/dropdown';
+
 import QuizzCard from '@/components/QuizzCard.vue';
 import { theme } from '@/state/theme';
 
@@ -31,16 +43,35 @@ const { Theme } = theme();
 const quizzService: QuizzService = new QuizzService();
 
 const selectedTheme = ref();
-const quizzList = ref();
+const quizzList = ref({ maxPage: 1, data: [] });
+const pageNumber = ref(1);
 
 async function loadQuizzList() {
+  pageNumber.value = 1;
   quizzList.value = await quizzService.getAll({
+    pageSize: 12,
     theme: selectedTheme.value.name,
   });
 }
 
+async function goToNextPage() {
+  pageNumber.value++;
+  quizzList.value = await quizzService.getAll({
+    pageSize: 12,
+    page: pageNumber.value,
+  });
+}
+
+async function goToPreviousPage() {
+  pageNumber.value--;
+  quizzList.value = await quizzService.getAll({
+    pageSize: 12,
+    page: pageNumber.value,
+  });
+}
+
 onMounted(async () => {
-  quizzList.value = await quizzService.getAll({ pageSize: 9 });
+  quizzList.value = await quizzService.getAll({ pageSize: 12 });
   console.log(quizzList.value);
 });
 </script>
@@ -87,6 +118,18 @@ onMounted(async () => {
         left: 50%;
         transform: translateX(-50%);
       }
+    }
+  }
+  .nav-button {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+
+    .more-button {
+      color: white;
+      cursor: pointer;
+      margin-right: 25px;
+      margin-left: 25px;
     }
   }
 }

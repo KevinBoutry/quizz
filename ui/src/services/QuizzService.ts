@@ -18,7 +18,6 @@ export class QuizzService {
     const quizz = await this.http.instance.post('/quizz/create', formData, {
       headers: { ContentType: 'multipart/form-data' },
     });
-
     return quizz;
   };
 
@@ -58,5 +57,9 @@ export class QuizzService {
     return await this.http.instance.get(
       `score/played/${data.quizz}/${data.user}`
     );
+  };
+
+  public getScoresByUserId = async (id) => {
+    return await this.http.instance.get(`/score/id/${id}`);
   };
 }
