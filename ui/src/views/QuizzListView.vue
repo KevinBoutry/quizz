@@ -72,7 +72,6 @@ async function goToPreviousPage() {
 
 onMounted(async () => {
   quizzList.value = await quizzService.getAll({ pageSize: 12 });
-  console.log(quizzList.value);
 });
 </script>
 

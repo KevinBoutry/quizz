@@ -115,7 +115,6 @@ async function saveQuizz() {
     .catch((error) => {
       console.log('error');
     });
-  console.log('res', res);
   if (res) {
     quizzCreated.value = true;
     quizzLink.value = `http://localhost:5173/quizz/${res.id}`;

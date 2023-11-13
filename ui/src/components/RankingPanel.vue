@@ -57,7 +57,6 @@ function addToCategory(id) {
   if (currentInput.value[index] != '') {
     PreviewQuizz.value.categories[index].items.push(currentInput.value[index]);
   }
-  console.log(PreviewQuizz.value.categories);
 }
 
 watch([rankstart, rankend], () => {

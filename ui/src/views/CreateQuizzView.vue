@@ -115,7 +115,6 @@ const imagePreview = async (event: any) => {
 };
 
 function createPreview() {
-  console.log(PreviewQuizz.value);
   router.push('/preview');
 }
 

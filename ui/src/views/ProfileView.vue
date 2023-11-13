@@ -5,14 +5,49 @@
       <div>id : {{ userProfile.userid }}</div>
       <div>email : {{ userProfile.email }}</div>
     </div>
-    <div class="created-quizz">
-      <h1>My Quizz</h1>
-
-      <DataTable :value="createdQuizz.data" tableStyle="min-width: 50rem">
-        <Column field="name" header="Name"></Column>
-        <Column field="timeplayed" header="Time Played"></Column>
-        <Column field="rating" header="Rating"></Column>
-      </DataTable>
+    <div class="bottom-part">
+      <div class="created-quizz">
+        <h1>My Quizz</h1>
+        <DataTable
+          :value="createdQuizz.data"
+          tableStyle="min-width: 50rem"
+          stripedRows
+        >
+          <Column field="name" header="Name" sortable></Column>
+          <Column field="timeplayed" header="Time Played" sortable></Column>
+          <Column field="averageScore" header="Average Score" sortable></Column>
+          <Column field="rating" header="Rating" sortable>
+            <template #body="slotProps">
+              <Rating
+                v-if="slotProps.data.rating"
+                :modelValue="slotProps.data.rating"
+                readonly
+                :cancel="false"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+      <div class="created-quizz">
+        <h1>My Scores</h1>
+        <DataTable
+          :value="playedQuizz"
+          tableStyle="min-width: 50rem"
+          stripedRows
+        >
+          <Column field="quizz.name" header="Name" sortable></Column>
+          <Column field="score" header="Score" sortable></Column>
+          <Column field="maxScore" header="Max Score" sortable></Column>
+          <Column field="time" header="Time" sortable></Column>
+          <Column field="quizz.id" header="">
+            <template #body="slotProps">
+              <router-link :to="`quizz/${slotProps.data.quizz.id}`"
+                >Retry</router-link
+              >
+            </template>
+          </Column>
+        </DataTable>
+      </div>
     </div>
   </div>
 </template>
@@ -20,6 +55,7 @@
 <script lang="ts" setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Rating from 'primevue/rating';
 
 import { useRouter } from 'vue-router';
 
@@ -38,19 +74,16 @@ const userService: UserService = new UserService();
 const quizzService: QuizzService = new QuizzService();
 
 const createdQuizz = ref({ data: [] });
+const playedQuizz = ref();
 
 onMounted(async () => {
-  if (isLogged) {
-    const user = await userService.getUser();
-    userProfile.value.username = user.username;
-    userProfile.value.email = user.email;
-    userProfile.value.userid = user.sub;
-  } else router.push('/');
   createdQuizz.value = await quizzService.getAll({
     creatorId: userProfile.value.userid,
     pageSize: 9,
   });
-  console.log(createdQuizz.value);
+  playedQuizz.value = await quizzService.getScoresByUserId(
+    userProfile.value.userid
+  );
 });
 </script>
 
@@ -62,5 +95,19 @@ onMounted(async () => {
   color: white;
   font-size: 2rem;
   text-align: center;
+
+  .bottom-part {
+    display: flex;
+    justify-content: space-around;
+    height: 60vh;
+    .created-quizz {
+      width: 45vw;
+      padding: 20px;
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  }
 }
 </style>

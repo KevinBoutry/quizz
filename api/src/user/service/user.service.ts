@@ -21,7 +21,8 @@ export class UserService {
   }
 
   async getOneById(userid: any): Promise<User> {
-    return await this.UserRepository.findOne(userid);
+    return await this.UserRepository.findOneBy({ id: userid });
+    // return await this.UserRepository.findOne({ id: userid });
   }
 
   async update(userid: number, user: User): Promise<UpdateResult> {

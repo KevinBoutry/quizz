@@ -39,7 +39,6 @@ export class QuizzService {
       whereClause.theme = filter.theme;
     }
     if (filter.creatorId) {
-      console.log(filter.creatorId);
       whereClause.user = { id: filter.creatorId };
     }
     const quizzes = await this.QuizzRepository.find({
@@ -66,9 +65,9 @@ export class QuizzService {
         ...quizz,
         thumbnail: this.getThumbnail(quizz.id),
         rating: await this.getRating(quizz.id),
+        averageScore: await this.getAverageScore(quizz.id),
       });
     }
-    console.log(result);
     return result;
   }
 
@@ -83,6 +82,28 @@ export class QuizzService {
       .execute();
     if (rating && rating.length > 0) {
       return Math.round(rating[0].average);
+    } else return null;
+  }
+
+  async getAverageScore(id) {
+    const averageScore = await this.QuizzRepository.createQueryBuilder()
+      .select('quizz.id')
+      .select('AVG(s.score)', 'average')
+      .from(Quizz, 'quizz')
+      .innerJoin('score', 's', 's.quizzId = quizz.id')
+      .where(`quizz.id = ${id}`)
+      .groupBy('quizz.id')
+      .execute();
+    const max = await this.ItemRepository.count({
+      relations: ['quizz'],
+      where: {
+        quizz: {
+          id,
+        },
+      },
+    });
+    if (averageScore && averageScore.length > 0) {
+      return Math.round((averageScore[0].average / max) * 100) + '%';
     } else return null;
   }
 
@@ -195,7 +216,6 @@ export class QuizzService {
     });
     const quizz = { ...savedQuizz, thumbnail: null };
     if (image.length > 0) {
-      console.log('jarrive dans la partie image', image);
       const path = './upload/thumbnails';
       const filePath = `${path}/${savedQuizz.id}.png`;
       await fs.ensureDir(path);

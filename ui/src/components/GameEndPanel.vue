@@ -37,9 +37,7 @@ const props = defineProps([
 ]);
 
 function closePanel() {
-  console.log('avant ', endGamePanelStatus.value);
   endGamePanelStatus.value = false;
-  console.log('apres ', endGamePanelStatus.value);
 }
 
 async function showStars() {

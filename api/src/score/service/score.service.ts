@@ -13,7 +13,6 @@ export class ScoreService {
   ) {}
 
   async create(data) {
-    console.log('data ', data);
     this.ScoreRepository.createQueryBuilder()
       .update('quizz')
       .set({
@@ -61,10 +60,12 @@ export class ScoreService {
     return await this.ScoreRepository.find({
       relations: ['quizz', 'user'],
       select: {
-        quizz: { name: true },
+        quizz: { name: true, id: true },
       },
       where: {
-        user,
+        user: {
+          id: user,
+        },
       },
     });
   }

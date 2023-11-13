@@ -82,7 +82,8 @@ onMounted(async () => {
   if (isLogged) {
     const user = await userService.getUser();
     userProfile.value.username = user.username;
-    userProfile.value.userid = user.sub;
+    userProfile.value.userid = user.id;
+    userProfile.value.email = user.email;
     setInterval(async () => {
       await userService.getUser();
     }, 1800000);

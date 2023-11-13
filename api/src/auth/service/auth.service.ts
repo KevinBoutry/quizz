@@ -29,4 +29,8 @@ export class AuthService {
       }),
     };
   }
+
+  async getUser(id) {
+    return await this.userService.getOneById(id);
+  }
 }
